@@ -1,0 +1,18 @@
+  \includegraphics{images/orcid.svg}
+  · \includegraphics{images/github.svg}
+  · \includegraphics{images/twitter.svg}
+\includegraphics{https://github.com/lubianat/cell_ontology_count/blob/master/results/classes_per_release.png?raw=true}
+\includegraphics{https://upload.wikimedia.org/wikipedia/commons/a/ae/Datamodel_in_Wikidata.svg}
+\includegraphics{https://upload.wikimedia.org/wikipedia/commons/6/6c/Rdf_mapping-vector.svg}
+\includegraphics{https://raw.githubusercontent.com/lubianat/fapesp_report_1/main/content/images/archetypes_hn.jpg}
+\includegraphics[width=0.85\textwidth,height=\textheight]{https://raw.githubusercontent.com/lubianat/multilevel_ontology_drawings/master/combination_human_cell.png}
+\includegraphics[width=0.85\textwidth,height=\textheight]{https://github.com/lubianat/fapesp_report_1/blob/main/content/images/poster_ISCB_intro.png?raw=true}
+\includegraphics[width=0.85\textwidth,height=\textheight]{https://github.com/lubianat/fapesp_report_1/blob/main/content/images/chat_marker.png?raw=true}
+\includegraphics[width=0.85\textwidth,height=\textheight]{https://github.com/lubianat/fapesp_report_1/blob/main/content/images/poster_ISCB_results.png?raw=true}
+\includegraphics{images/note_taking_station_annotated_with_links.png}
+\includegraphics[width=0.85\textwidth,height=\textheight]{images/wikidata_bib_display.png}
+\includegraphics[width=0.85\textwidth,height=\textheight]{images/biocuration_of_cells.png}
+\includegraphics[width=0.85\textwidth,height=\textheight]{https://pointstodots.files.wordpress.com/2021/09/image-17.png}
+\includegraphics[width=0.85\textwidth,height=\textheight]{https://user-images.githubusercontent.com/7917951/137942026-7645f368-d62a-4434-be05-083555cf0757.png}
+\includegraphics{https://oup.silverchair-cdn.com/oup/backfile/Content_public/Journal/nar/PAP/10.1093_nar_gkab991/2/gkab991fig3.jpeg?Expires=1641821957\&Signature=RK-es18S~Qh6vGQE~61i6u4prMuij8kVTbrjN6WUJLfYHOAhUhx9qQorBxROohjLLxbHvZ2YK9e7EwlI9HjVeNoGZ2PJs0Pv78Y31MdZLY8FeLYI2E4azwrqRyv9q0AH8QL3RorWZV1AhOb9bl-44Mr97Q~9MWzeTDnQQbxpCnGLG~YoG49kocD5KE~dmTSQdkXBU7kZnuGM1NPqMHo5ZDUoCRFwmTbLvd4kXoH~6CTyqx4ruQRIO-ks4Q0FUjYnxGX18gCFvoO2LMPZUPrQjTgD35RrVAkLs91Ur6BQHUuZ-ZsE3Iag3mBDu27vT9Jr93bOj0i9wz~surTtEGATgw__\&Key-Pair-Id=APKAIE5G5CRDK6RD3PGA}
+\includegraphics{images/janus_courses_taken.png}

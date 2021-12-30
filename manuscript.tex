@@ -1,0 +1,2053 @@
+This manuscript
+(\href{https://lubianat.github.io/quali_phd/v/eb1b60a057886c60a568ad9586443de700dd0c32/}{permalink})
+was automatically generated
+from \href{https://github.com/lubianat/quali_phd/tree/eb1b60a057886c60a568ad9586443de700dd0c32}{lubianat/quali\_phd@eb1b60a}
+on December 16, 2021.
+
+\hypertarget{authors}{%
+\subsection{Authors}\label{authors}}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Tiago Lubiana}
+  \includegraphics{images/orcid.svg}
+  \href{https://orcid.org/0000-0003-2473-2313}{0000-0003-2473-2313}
+  · \includegraphics{images/github.svg}
+  \href{https://github.com/lubianat}{lubianat}
+  · \includegraphics{images/twitter.svg}
+  \href{https://twitter.com/lubianat}{lubianat}
+  School of Pharmaceutical Sciences, University of São Paulo; Ronin Institute
+  · Funded by Grant \#2019/26284-1 from the São Paulo Research Foundation (FAPESP).
+\end{itemize}
+
+\hypertarget{abstract}{%
+\section{Abstract}\label{abstract}}
+
+The Human Cell Atlas (HCA) is an international effort to characterize every cell type of the human body.
+HCA members are producing cell-level data from virtually all human tissue using techniques such as single-cell RNA sequencing, mass cytometry, and multiplexed in situ hybridizations.
+The wealth knowledge stemming from the wealth of data needs management to maximize the societal benefit of HCA.
+While semantic technologies have emerged as key players in the data interoperability ecosystem, there are still gaps to bridge.
+Wikidata, a sister project of Wikipedia for structured data, is surfacing as a hub in the semantic web for multiple types of information and bridging experts and the people.
+The connection of the Human Cell Atlas to Wikidata can quickly insert its products into the larger knowledge ecosystem, extending HCA's reach.
+This PhD project aims at studying Wikidata as a platform for representing cell types.\\
+We review the literature on cell types, refining and formalizing concepts for cell type delimitation.
+At the same time, integrate biomedical databases (e.g.~PanglaoDB) into the Wikidata infrastructure and we enrich Wikidata with manually curated cell types.
+To optimize the curation, we develop Wikidata Bib, a framework for literature management and organized note-taking system for dealing with the academic literature.
+Finally, we are improving the interplay of Wikidata, the Cell Ontology and software used for single-cell RNA-seq data, inserting Wikidata \emph{de facto} as a tool for the Human Cell Atlas community.
+
+\hypertarget{preface}{%
+\subsection{Preface}\label{preface}}
+
+In this preface we present an overview of the chapters in this document.
+
+The introduction contains an overview of the Human Cell Atlas project and the current state of classifying cells into types.
+Then, it introduces ontologies and knowledge graphs as tools for connecting what we know about cells.
+
+The methodology section is an overview of the core methods used throughout the work.
+Of note, some chapters in the results section also display methods when they are intimately linked with the results.
+
+It is worth noticing that the different results shown were not developed chronologically in the order shown.
+The different branches were developed in parallel, with overlapping periods of activity.
+They are organized into separate chapters and part of different publications.
+
+The discussion on the concept of cell type is presented first, as it is instrumental for the later steps.
+It is followed by an account of how PanglaoDB, a database of cell markers, was integrated into Wikidata.
+Then, we present Wikidata Bib, a framework for an organized reading and curation of cell types.
+The framework, although used as a method throughout the PhD project, is also an intelectual product, thus presented in the results session.
+To end the results, we discuss how the work integrates with the Cell Ontology, the leading system for organizing cell types.
+
+After the results, an account of other academic aspects of the project is presented as part of the qualification requirements.
+They present an overview of collaborations, participation in events and academic courses taken during the first part of the PhD project.
+
+\hypertarget{background}{%
+\subsection{Background}\label{background}}
+
+\hypertarget{the-human-cell-atlas-hca-project}{%
+\subsection{The Human Cell Atlas (HCA) Project}\label{the-human-cell-atlas-hca-project}}
+
+The Human Cell Atlas (HCA) project is, arguably, the biggest multinational biomedical project of the present time, running since 2017 to characterize every cell type in the human body {[}\protect\hyperlink{ref-1GmbExweg}{1}{]}.
+The HCA consortium gathers people from all over the world to tackle different parts of the project to have a diverse and equitable account of the cell type diversity. {[}\protect\hyperlink{ref-tjdjR2Xf}{2}{]}\\
+It intends to ``ultimately describe at least 10 billion cells, covering all tissues, organs, and systems'' and, to achieve such bold goals, it commits to ``to open membership, to the open and immediate data release with no restrictions, and to open-source code for all computational approaches''. {[}\protect\hyperlink{ref-1GmbExweg}{1}{]}
+
+Building a complete atlas of human cells comes with multiple challenges.
+The project includes the detection, in single cells, of RNA species (scRNA-Seq), chromatin accessibility (scATAC-Seq), and protein markers (primarily by CYTOF), as well as spatial information on cells with multiplexed \emph{in situ} hybridization (such as MERFISH) and imaging mass cytometry {[}\protect\hyperlink{ref-1GmbExweg}{1},\protect\hyperlink{ref-kkwRTArg}{3}{]}.
+The HCA is set to revolutionize the biomedical sciences by creating tools and standards for basic research, allowing better characterization of disease, and improving diagnostics and therapy.
+Its products (data, information, knowledge and wisdom) need to be FAIR: findable, accessible, interoperable and reusable.
+Data stewardship and management are growing as core demands of the scientific community, ranging from data management plans {[}\protect\hyperlink{ref-1DSEIjFha}{4}{]} to specialized data personnel {[}\protect\hyperlink{ref-1DSEIjFha}{4}{]}.
+
+The Human Cell Atlas has a dedicated team for organizing data: the Data Coordination Platform (DCP) {[}\protect\hyperlink{ref-zDRzmIGu}{5}{]} {[}\protect\hyperlink{ref-kkwRTArg}{3}{]}.
+The DCP is responsible for tracing the plan for computational interoperability, from the data generators to the consumers.{[}\protect\hyperlink{ref-kkwRTArg}{3}{]}.
+The Human Cell Atlas has its portal for data {[}\protect\hyperlink{ref-kX6KnbUo}{6}{]}), which composes the data repository landscape with other resources, like the Broad Institute Single Cell Portal {[}https://singlecell.broadinstitute.org/single\_cell\textgreater) and the Chan-Zuckerberg Biohub Tabula Sapiens (\url{https://tabula-sapiens-portal.ds.czbiohub.org/}).
+In addition to its core team, the HCA is poised to grow by community interaction.
+As stated in its opening publication ``As with the Human Genome Project, a robust plan will best emerge from wide-ranging scientific discussions and careful planning''.{[}\protect\hyperlink{ref-1GmbExweg}{1}{]}\\
+Thus, this project inserts itself among the wide-ranging scientific discussions to improve data - and knowledge - interoperability.
+
+The highlight of ``knowledge'' in the last paragraph is meant to stress that raw data \emph{per se} is not enough to turn the Atlas objectives into reality.
+There is a long way from raw datasets to commonly-agreed scientific knowledge.
+Currently, the gap between data and knowledge is attempted by writing and sharing scientific manuscripts, the \emph{de facto} currency of exchange of claims about the natural world.
+A Human Cell Atlas Publication Committee reviews and selects publications, {[}\protect\hyperlink{ref-2A7P3sTH}{7}{]} presenting the papers as one of the significant outputs of the whole endeavour.
+As of december 2021, the list includes 96 different publications, which, arguably, expose only a fraction of the knowledge extractable from the underlying data.
+
+The challenge that arises is one of managing a wealth of information and casting it into useful knowledge.
+Ideally, we would like to understand, remember, and use every statement produced by the HCA.
+As this goal is humanely impossible, we need to develop tools to make the knowledge interoperable with the aid of computers.
+At that point, the challenges of the HCA enter in resonance with the challenges of biocuration, and with the goals of this project.
+
+One core step for knowledge management is the minting of identifiers for the concepts of interest. {[}\protect\hyperlink{ref-tvnuubVW}{8}{]}
+The minting of identifiers, however, depend on clear, well defined entities.
+The sheer notion of ``cell type'' is undefined {[}\protect\hyperlink{ref-1GmbExweg}{1}{]}, a challenge for organizing both data and knowledge.
+Accordingly, this PhD project concerns itself also with the theoretical basis of defining a ``cell type''.
+Thus, the next chapter will introduce the state-of-the-art of classifying cell into types, in a preparation for the chapter on knowledge modelling and the theoretical discussions of the results section.
+
+\hypertarget{classification-of-cells-into-types}{%
+\section{Classification of cells into types}\label{classification-of-cells-into-types}}
+
+Given that a core goal of the Human Cell Atlas is to advance knowledge about \emph{all} human cell types, {[}\protect\hyperlink{ref-1GmbExweg}{1}{]} the definition of ``cell type'' becomes essential.
+Although a number of views exist {[}\protect\hyperlink{ref-paKiKTRS}{9},\protect\hyperlink{ref-sWv3okaH}{10},\protect\hyperlink{ref-19yYJWEkz}{11},\protect\hyperlink{ref-BlxFp1v3}{12},\protect\hyperlink{ref-eOUB1Bmj}{13},\protect\hyperlink{ref-TupzTvtA}{14},\protect\hyperlink{ref-w0Woz7JE}{15},\protect\hyperlink{ref-srfuRMe}{16},\protect\hyperlink{ref-1GXQByEaQ}{17},\protect\hyperlink{ref-k0Pe9YOB}{18},\protect\hyperlink{ref-pNGap1Du}{19},\protect\hyperlink{ref-MoaYZAA0}{20},\protect\hyperlink{ref-WAeCfntu}{21}{]}, there is no formal, commonly agreed upon defintion of cell type.
+
+A 2017 article on the Human Cell Atlas mentions{[}\protect\hyperlink{ref-BlxFp1v3}{12}{]}:
+``Descriptors such as `cell type' and `cell state' can be difficult to define at the moment. An integrative, systematic effort by many teams of scientists working together and bringing different expertise to the problem could dramatically sharpen our terminology, and revolutionize the way we see our cells, tissues and organs. We invite you to join the effort.''
+
+The article further highlights both the current gap in knowledge and the need for a community effort to work in finding definitions.
+The magnitude of the challenge justifies the position of the HCA to avoid attempting to propose a precies definition of `cell type'. {[}\protect\hyperlink{ref-1GmbExweg}{1}{]}
+
+One consequence of a lack of a definition is that there is no commonly agreed number of cell types, and not even on the order of magnitude.
+As of November 2021, the leading answers in the Google Search Engine for the question ``How many different cell types are found in the human body?'' all point to around 200 different types {[}\protect\hyperlink{ref-V85zvNGa}{22},\protect\hyperlink{ref-SKmDXJlO}{23},\protect\hyperlink{ref-WBDY0Uoy}{24}{]}, an estimate that is agreed upon by Bionumbers, a database of useful biological numbers {[}\protect\hyperlink{ref-SprCx2w6}{25}{]} {[}\protect\hyperlink{ref-jePJgR0H}{26}{]}.
+A list of cell types in the adult human body on Wikipedia also amounts to around a couple hundred cell types {[}\protect\hyperlink{ref-url}{\textbf{url?}}{]}.
+
+If we look at other sources, however, the estimates increase considerably.
+For example, the Cell Ontology has catalogued more than 2,311 cell types of interest for the Human Cell Atlas {[}\protect\hyperlink{ref-J5X2Xu6M}{27}{]}, increasing the estimate by at least one order of magnitude.
+Across the literature, we can find mentions of thousands to tens of thousands of cell types only in the brain. {[}\protect\hyperlink{ref-15efKvxi0}{28},\protect\hyperlink{ref-wvN4dtjQ}{29}{]}
+Additionally, with an estimate of 37 trillion cells on average per human body {[}\protect\hyperlink{ref-xWhvkd3B}{30}{]} and an ever-increasing report of new cell types/clusters in single-cell transcriptomics {[}\protect\hyperlink{ref-HFiosSKK}{31}{]}, it is reasonable to assume the number of relevant cell types might be much larger.
+The Human Cell Atlas project itself does not commit to any estimates of numbers of cell types due to the sheer difficulty of estimating a number given current knowledge. (Aviv Regev; reply to a question in the HCA General Meeting conference {[}\protect\hyperlink{ref-url}{\textbf{url?}}{]})
+
+Even though there is no commonly agreed definition, different views on cell types are maturing, tailored to different research needs.
+One core line of thought to define ``cell type'' is based on the cell type as an evolutionary unit.
+That definition enables the drawing of parallels, from the evolution of other biological entities (such as genes, proteins, and species) to cell types' evolution.
+Models of how multicellular life works greatly benefit from concepts as sister types (sharing a single ancestor), cell type homology (sharing a common evolutionary origin), and cell type convergence (executing similar functions without direct evolutionary links) {[}\protect\hyperlink{ref-O95WN4x0}{32},\protect\hyperlink{ref-ogAGO9KH}{33}{]}
+
+Another school of thought is based on attractors: regions of dynamical stability in a feature space. {[}\protect\hyperlink{ref-14J9lsoMd}{34},\protect\hyperlink{ref-OjxQDZpx}{35}{]}
+In this theory, ``basins of attraction'' direct cell phenotypes, providing points in, say, a gene expression space towards which different cells ``move'' their expression programs.
+This dynamic view sees each cell type corresponding to ``a self-stabilizing regulatory program, which acts to maintain and restore the cell type-specific program of gene expression.'' {[}\protect\hyperlink{ref-19g5Iusf9}{36}{]}
+It aligns itself with dynamic systems theory, and some authors go as far as to say that ``Lacking the idea of attractors we have no clear idea of what a cell type is.'' {[}\protect\hyperlink{ref-4TJnL1xT}{37}{]}
+
+As much as different species concepts coexist {[}\protect\hyperlink{ref-g74dZjOM}{38}{]}, the quest to define cell types may take various forms.
+The challenge of representing cell types in evolution is conceptually different from representing cell types for identifying different entities on biomedical data.
+In that second direction, the groundwork of the Cell Ontology {[}\protect\hyperlink{ref-1CI8uS6ka}{39},\protect\hyperlink{ref-gAysgnsS}{40},\protect\hyperlink{ref-17U3pGEjv}{41}{]} is notable, providing identifiers that are reused across a range of databases. {[}\protect\hyperlink{ref-qT8WxqjA}{42}{]}
+Theoretical discussions on cell types is also the topic of specialized conferences, namely the International Workshop on Cells in Experimental Life Sciences conference series {[}\protect\hyperlink{ref-jX2ZmXcc}{43},\protect\hyperlink{ref-rK8KD0us}{44}{]}.
+
+\hypertarget{single-cell-transcriptomics}{%
+\subsection{Single-cell transcriptomics}\label{single-cell-transcriptomics}}
+
+Even though many sources of knowledge contribute to our understanding of cell types {[}\protect\hyperlink{ref-16phbXNJE}{45}{]}, arguably single-cell transcriptomics is the workhorse for current efforts of the Human Cell Atlas. {[}\protect\hyperlink{ref-16phbXNJE}{45}{]}
+Current scRNA-seq data analyses often rely on unsupervised clustering followed by labeling clusters.
+For the clustering, bioinformaticians select parameter sets to a target resolution, i.e., the level of detail used to detect cell identities. {[}\protect\hyperlink{ref-WKbly37M}{46}{]} {[}\protect\hyperlink{ref-1GmbExweg}{1}{]}
+When the clustering is finished, the groups of cells are annotated with class labels, representing the underlying biology in a language we can understand. {[}\protect\hyperlink{ref-ii1dVqoy}{47}{]}
+
+Instead of assigning expression gates, as done for flow-cytometry, single-cell RNA-seq analysis pipelines start from \emph{de novo} clustering of cells followed by cluster annotation. {[}\protect\hyperlink{ref-WKbly37M}{46}{]}
+While it is clear that clusters and cell types are different concepts {[}\protect\hyperlink{ref-WKbly37M}{46}{]}, often cluster labels are treated as cell types.
+There are several ways to cluster cells to find groups of similarity, and arguably the current default is derived from the methodology proposed by PhenoGraph. {[}\protect\hyperlink{ref-pEJYKNFc}{48}{]}
+The protocol is to calculate the distances between cells in a reduced PCA space (with the number of dimensions chosen by the experimenters), followed by constructing a k-nearest-neighbours network.
+Each cell is a node connected by \emph{k} (another parameter) edges to other cells.
+Once the network is built, network modules (i.e.~cell clusters) are commonly found using the Louvain algorithm, published in 2008 by researchers of the Université Catholique de Louvain in Belgium. {[}\protect\hyperlink{ref-JpCsfe9G}{49}{]}
+The cell clusters found by the PhenoGraph (or any other) algorithm are then labelled by domain experts, often based on genes called ``cluster markers'', differentially expressed on each cluster. {[}\protect\hyperlink{ref-WKbly37M}{46}{]}
+
+While it is possible to manually assign labels to clusters, automatic methods have been developed to aid in the task. {[}\protect\hyperlink{ref-ii1dVqoy}{47}{]}
+Mmarker-based automatic annotation bases itself on crossing clusters markers in the analyzed dataset with previous knowledge from databases like PanglaoDB {[}\protect\hyperlink{ref-1GezH4XNn}{50}{]} and CellMarker {[}\protect\hyperlink{ref-chGii6yw}{51}{]} {[}\protect\hyperlink{ref-ii1dVqoy}{47}{]}.
+Reference-based automatic cell annotation, on the other hand, relies on expert-annotated reference datasets to transfer labels to the dataset under study. {[}\protect\hyperlink{ref-ii1dVqoy}{47}{]}
+Other methods bypass the clustering step and focus on labelling individual cells, which avoids lumping different cells together. {[}\protect\hyperlink{ref-ii1dVqoy}{47}{]}
+Clarke et al.'s recent review and tutorial {[}\protect\hyperlink{ref-ii1dVqoy}{47}{]} provides an extensive account of current techniques for clustering and annotating cells.
+
+Of note, even though a range of methods is available, most techniques and publications do not use standard identifiers for cell types.
+That omission disregards the advantages of using standard identifiers, such as those provided by the Cell Ontology. {[}\protect\hyperlink{ref-ii1dVqoy}{47}{]} {[}\protect\hyperlink{ref-tvnuubVW}{8}{]} {[}\protect\hyperlink{ref-J5X2Xu6M}{27}{]} {[}\protect\hyperlink{ref-agnqfdk6}{52}{]} {[}\protect\hyperlink{ref-SozKx0lF}{53}{]} {[}\protect\hyperlink{ref-15xnotFsw}{54}{]}.
+Reassuringly, projects that use stable identifiers for single-cell RNA-seq data are appearing {[}\protect\hyperlink{ref-qT8WxqjA}{42}{]}, including python and R packages (e.g.~Besca {[}\protect\hyperlink{ref-P1gDLuog}{55}{]}, OnClass {[}\protect\hyperlink{ref-sW6aNZJB}{56}{]} and ontoProc{[}\protect\hyperlink{ref-15YmDXALp}{57}{]}), data management projects and reference datasets, (e.g.~Tabula Muris {[}\protect\hyperlink{ref-tdlWsvTd}{58}{]} and Tabula Sapiens {[}\protect\hyperlink{ref-FjUqVIOp}{59}{]} Azimuth map {[}\protect\hyperlink{ref-T7RxnUNw}{60}{]} and HubMap's ASCT+B Tables {[}\protect\hyperlink{ref-1FghWzORJ}{61}{]}) and annotation platforms (e.g.~the Cell Annotation Platform {[}\protect\hyperlink{ref-yMavNVkS}{62}{]} and CellTypist {[}\protect\hyperlink{ref-123DiCgc8}{63}{]}).
+
+The Cell Ontology is currently the biggest provider of such standard identifiers.
+As elegantly put by Meehan et al. {[}\protect\hyperlink{ref-UduMr7x2}{64}{]} the Cell Ontology is a ``manually constructed computer-readable resource that links cell types by different relationships''.
+It was first described in 2005 {[}\protect\hyperlink{ref-1CI8uS6ka}{39}{]} and was oriented both at creating a species-neutral classification of cells and
+for researchers to ``learn a considerable amount about that cell type and its relationships to other biological objects'' {[}\protect\hyperlink{ref-1CI8uS6ka}{39}{]}:
+
+The collaborative project gradually evolved and changed its design and scope to fit new needs.
+By 2011, a need for computable definitions led to an advance in the number and quality of immune cell types represented in CL. {[}\protect\hyperlink{ref-ecteO8vI}{65}{]}
+It also included the addition of species-specific cell types to handle better marker-based definitions, usually presented at the species level. {[}\protect\hyperlink{ref-ecteO8vI}{65}{]}
+Further developments over the years included both technical improvements and the addition of new cell types.
+By the time of the last official CL publication, in 2016, it contained approximately 2,200 classes. {[}\protect\hyperlink{ref-agnqfdk6}{52}{]}\\
+Currently, the Cell Ontology is growing as a resource for the Human Cell Atlas and in providing identifiers for cell types {[}\protect\hyperlink{ref-qT8WxqjA}{42}{]} and presents over 2500 classes of cells (Figure \ref{fig:cl_counts})
+
+\begin{figure}
+\hypertarget{fig:cl_counts}{%
+\centering
+\includegraphics{https://github.com/lubianat/cell_ontology_count/blob/master/results/classes_per_release.png?raw=true}
+\caption{Cell Ontology unique cell classes mentioned per release. Some releases around 2014 are not available anymore, thus yielding 0 counts.}\label{fig:cl_counts}
+}
+\end{figure}
+
+The solution to the challenges of cell type classification, thus, pass via ontologies and other best practices of knowledge management. {[}\protect\hyperlink{ref-qT8WxqjA}{42}{]}
+Consequently, on the following chapter, we present tools for computer-based knowledge processing.
+We introduce the technical aspects of ontologies and knowledge graphs, present Wikidata, and discuss how such tools can can influence life-sciences research.
+
+\hypertarget{ontologies}{%
+\subsection{Ontologies}\label{ontologies}}
+
+The classification of biological concepts is at the core of biology. At least since the Aristotelian endeavours to group classes of animals, a good part of the scientific work is to capture concepts into knowledge systems {[}\protect\hyperlink{ref-DLTMbf54}{66}{]}.
+Linnaeus' binomial system for naming species and Mendeleev's periodic table are likely the two most famous classification systems but are part of a much larger ecosystem of structuring scientific knowledge.
+
+On the 20th century, the development of the analytical philosophy of Russel and Wittgenstein and their search for formalizations {[}\protect\hyperlink{ref-cZEmYsqx}{67}{]} gradually layed the foundations for the the logic of scientific descriptions.
+Karl Popper and his ``The Logic of Scientific Discovery''{[}\protect\hyperlink{ref-to2onCDy}{68}{]} was heavily influenced by analytical philosophy.
+Less known among life scientists, Tarski's inquiries on what can be considered to be ``true'' {[}\protect\hyperlink{ref-RghcuiSS}{69}{]} were also foundational for formal ontologies.
+In the end of the 20th century, the tradition of analytic philosophy contributed to the rise of applied ontology, which provided the theoretical basis for the computational ontlogies from the early 21st centhury. {[}\protect\hyperlink{ref-35incsRu}{70}{]}
+
+The whole movement for formalization of knowledge progressed on the computational end. At the late 20th century, the advent of computational ontologies and large-scale knowledge graphs were at the root of the functioning of the World Wide Web.
+This chapter will provide an overview of ontologies and knowledge graphs and their use in today's biomedical sciences, alongside its future prospects.
+
+\hypertarget{the-obo-foundry-and-biomedical-ontologies}{%
+\subsubsection{The OBO Foundry and biomedical ontologies}\label{the-obo-foundry-and-biomedical-ontologies}}
+
+An ontology, as used here, is a formal computational representation of reality, which tries to represent each concept (and their relations) as precisely as possible. {[}\protect\hyperlink{ref-DLTMbf54}{66}{]}\\
+Constructing an ontology is a process of selecting and defining terms of interest, selecting and defining relationships of interest and making statements about reality using terms and relationships.
+The Gene Ontology is probably the most well known biomedical ontology; it describes (among other things) different classes of biological process related to each\_other by ``is\_a'' and ``part\_of relations. {[}\protect\hyperlink{ref-18wkLcGxT}{71}{]} {[}\protect\hyperlink{ref-2KmDs8gy}{72}{]}.
+
+The Gene Ontology is part of a much larger effort to formalize concepts across biology: the Open Biomedical and Biological Ontologies (OBO) Foundry. {[}\protect\hyperlink{ref-j3tJyG7J}{73}{]}
+Created in 2007, the OBO Foundry is a hub of biomedical ontologies that sets guidelines for designing and constructing high-quality ontologies.
+Under a common framework towards interoperability, the initial OBO Foundry united several independent ontologies (like the Cell Ontology, the Disease Ontology and the Protein Ontology).
+At the same time, the creation of the Relation Ontology (RO) provided a go-to point for relations in biology that different ontologies could reuse.
+
+\hypertarget{owl-and-ontology-languages}{%
+\subsubsection{OWL and ontology languages}\label{owl-and-ontology-languages}}
+
+One of the OBO Principles for its ontologies is that they should be resolvable as a ``syntactically valid OWL file using the RDF-XML syntax.'' (http://www.obofoundry.org/principles/fp-002-format.html).
+The OWL Web Ontology Language was introduced as a standard by the W3C consortium in 2004.
+OWL is not a programming language, as it does not instruct computers to perform actions, but an ontology language, which allows computerizable descriptions of the world.
+Furthermore, it is an umbrella ontology language that includes several languages with varying levels of expressivity.
+Generally, more expressive languages can represent more complex ideas but make computations harder.
+
+Regardless of ontology's sublanguage, it must be resolvable to an RDF-XML file.
+RDF stands for Resource Description Framework, another W3C standard built around a graph-based data model {[}\protect\hyperlink{ref-djVboz3w}{74}{]}.
+Statements in RDF are triples consisting of 2 nodes (a subject and an object) and an edge (a predicate) connecting the nodes.
+All nodes and edges are represented in RDFs by International Resource Identifiers (IRIs), and there are many ways to lay out those IRIs on a text file to represent triples.
+One of those layouts is the RDF-XML syntax, inspired by the XML markup language.
+Arguably, other syntaxes (interchangeable with RDF-XML) are easier to read for a human.
+As an example of an RDF triple, here is how one would represent in the Turtle RDF Syntax, the notion that plasmacytoid dendritic cells are a type of dendritic cells:
+
+\begin{verbatim}
+http://purl.obolibrary.org/obo/CL_0000784  http://www.w3.org/2000/01/rdf-schema#subClassOf  http://purl.obolibrary.org/obo/CL_0000451 .
+\end{verbatim}
+
+Where http://purl.obolibrary.org/obo/CL\_0000784 and http://purl.obolibrary.org/obo/CL\_0000451 are the unique IDs in the Cell Ontology for ``plasmacytoid dendritic cells'' and dendritic cells, respectively, and http://www.w3.org/2000/01/rdf-schema\#subClassOf is the identifier for the ``subclass of'' relation as defined by the RDF schema.
+
+A longer explanation of the details of OWL and RDF is outside the scope of this work.
+This brief introduction has a dual goal of introducing the architecture of formal representations and demonstrating the system's complexity.
+There is a high energy barrier to acquiring the knowledge and the technical skills to engage in ontology building.
+That complexity might be one of the reasons why a tiny fraction of the biomedical communities represent data with ontologies, and an even smaller fraction engages with ontology building.
+
+\hypertarget{wikidata}{%
+\subsection{Wikidata}\label{wikidata}}
+
+Even though the Semantic Web (which ontologies are a part of) spawned with promises of a revolution in the way knowledge is shared, it is still to be widely known outside semantic engineering. Two recent projects are playing a significant role in bringing the Semantic Web to a broader audience: the Google Knowledge Graph and Wikidata.
+
+The Google Knowledge Graph introduced the Semantic Web \emph{de facto} in the daily life of users of Google. {[}\protect\hyperlink{ref-16mCkZC1r}{75}/{]}. Its underlying structure is similar to the triples in an ontology, but it is less concerned with being logically coherent and does have strict semantics of a representation.
+In that way, Google Knowledge Graphs can feed on a variety of sources and not crash if there is some data modelling that, rigorously, could be inconsistent.
+Even though there is not a strict boundary between ontologies and knowledge graphs, one reasonable interpretation is that a knowledge graph may not be perfectly coherent, as long as it still can provide enough knowledge and reasoning for the approach of interest.
+While the lack of formal semantics limits reasoning and inference, the knowledge graphs are arguably easier to use, edit and understand, and so provide a user-friendly alternative for computable information with a lower entry barrier.
+
+While the Google Knowledge Graph is widely used as a source of knowledge, it does not allow independent users to contribute information.
+On the other hand, Wikidata, the collaborative knowledge graph of the Wikimedia Foundation, allows users to contribute with classes and statements in the same spirit as Wikipedia and share its ``epistemic virtues, like power, speed and availability. {[}\protect\hyperlink{ref-qMozvNth}{76}{]}
+Its power is derived from its large community of contributors, closely linked to the hugely successful Wikipedia.
+With a community of more than 20,000 active editors {[}\protect\hyperlink{ref-SGzjBOG0}{77}{]} and growing, it can cover a much wider number of concepts than any user individually.
+It is fast because one does not need to install any software or ask for permissions to update it: any user can do it via a web interface.
+That speed makes it easier for newcomers to join and contribute, in contrast to OBO Foundry ontologies, which require extensive training on semantics and knowledge of Git/GitHub for contributions.
+Finally, the information on Wikidata is available via a user interface, via a SPARQL query service and as large, full-size database dumps, providing full extent reusability.
+The Wikidata model has been so successful that Google decided to migrate its knowledge base, Freebase, fully into Wikidata.{[}\protect\hyperlink{ref-xLpRePoh}{78}{]}
+
+\hypertarget{the-inner-workings-of-wikidata}{%
+\subsubsection{The inner workings of Wikidata}\label{the-inner-workings-of-wikidata}}
+
+Wikidata uses the same framework (RDF) that powers ontologies, and its model represents statements about the world in triples containing a subject, a property and an object. {[}\protect\hyperlink{ref-Ea6hVYrD}{79}{]}
+Its data model is serialized both in JSON and RDF.
+The data model contains 17 different data types, including, for example, ``Item'', an entry on Wikidata that refers to ``o a real-world object, concept, or event that is given an identifier in Wikidata'' and ``String'', a ``sequence of freely chosen characters interpreted as text''. {[}\protect\hyperlink{ref-17Yt10yrY}{80}{]}.
+Knowledge is stored on Wikidata upon basic triples containing a subject (of type ``Item''), a property and a value (which can be of any of the 17 types).
+As of November 2021, Wikidata contains more than 90 million data items {[}\protect\hyperlink{ref-SGzjBOG0}{77}{]} and more than 9000 properties that link them to values.
+As values often are other items, the database acquires a network format with labelled edges.
+
+As seen in the example in \ref{fig:douglas_adams}, each of the items in the database contains an item identifier (Q followed by numbers).
+They also contain a label, a description, and a list of aliases, which can be recorded in more than 200 hundred languages, making it a multilingual project. {[}\protect\hyperlink{ref-S1Lksw7i}{81}{]}
+Each item is decorated with statements comprising property-value pairs.
+These pairs can be further specified via qualifiers and references, which treats the full triple as the subject, adding metadata to it (a process called reification {[}\protect\hyperlink{ref-ZhP1mKyl}{82}/\#reification{]}).
+Qualifiers provide ways to extend the information on the triple, while references provide provenance, enabling users to judge the validity of the claims in the database.
+
+\begin{figure}
+\hypertarget{fig:douglas_adams}{%
+\centering
+\includegraphics{https://upload.wikimedia.org/wikipedia/commons/a/ae/Datamodel_in_Wikidata.svg}
+\caption{Wikidata's model for describing an item. Image released in Public Domain by Charlie Kritschmar.}\label{fig:douglas_adams}
+}
+\end{figure}
+
+All the information is available on a user interface and programmatically.
+Advanced users can download dumps in JSON and RDF dumps and acess the data via the MediaWiki API and a SPARQL endpoint. {[}\protect\hyperlink{ref-4wSLyAPr}{83}{]}
+Several wrappers of such services are available in languages such as R {[}\protect\hyperlink{ref-1HghnypzG}{84}{]} and python {[}\protect\hyperlink{ref-VKWfrtR1}{85}{]}.
+The data scheme can be seen in \ref{fig:data} model, where each item is connected to a statement node via a property in the ``p:'' namespace, from which references and qualifiers are accessible.
+To facilitate primary usage, the namespace ``wdt:'' connects items to values directly, simplifying, for example, the writing of SPARQL queries.
+
+\begin{figure}
+\hypertarget{fig:datamodel}{%
+\centering
+\includegraphics{https://upload.wikimedia.org/wikipedia/commons/6/6c/Rdf_mapping-vector.svg}
+\caption{Wikidata's data model, scheme released under the CC-BY 4.0 license by Michael F. Schönitzer. It outlines the primary representation of statements, qualifiers and values in the Wikidata database}\label{fig:datamodel}
+}
+\end{figure}
+
+Information on Wikidata is released under a CC0 license, which enables full reuse of the data. {[}\protect\hyperlink{ref-tQIJPG4k}{86}{]}
+One of the major points of access and reuse of the information is the Wikidata Query Service {[}\protect\hyperlink{ref-2wDsXBwd}{87}{]}, a core resource of the community which enables live querying in the SPARQL language. {[}\protect\hyperlink{ref-t66jYhqe}{88}{]}
+A number of services make use of embedded queries from the Wikidata Query Service {[}\protect\hyperlink{ref-2wDsXBwd}{87}{]} to create interactive, live dashboards like Scholia {[}\protect\hyperlink{ref-17P4zruFZ}{89}{]} and the SARS-CoV-2 Query Book {[}\protect\hyperlink{ref-guMp3q1V}{90}{]}
+
+Wikidata is accessible in many ways and writable in many ways.
+It provides a user-friendly, point-and-click interface for modifying the database, providing low entry barriers for newcomers.
+It is also possible to semi-automatically reconcile spreadsheets to Wikidata items and use batch tools such as Open Refine {[}\protect\hyperlink{ref-17rRjL1Xj}{91}{]} and Quickstatements {[}\protect\hyperlink{ref-K6ggpwRg}{92}{]}, which enable batches on the magnitude of thousands of edits.
+For larger amounts of edits, it is possible to ask for bot permissions {[}\protect\hyperlink{ref-sSH04fxa}{93}{]} and deploy systems that integrate big data sources.
+Bot edits are made via the Wikimedia API and are predominantly written via Python wrappers, such as Pywikibot {[}\protect\hyperlink{ref-5K5MfnVl}{94}{]} and the Wikidata Integrator. {[}\protect\hyperlink{ref-qDI8I4IJ}{95}{]}
+
+\hypertarget{wikidata-as-a-knowledge-graph-for-the-life-sciences}{%
+\subsubsection{Wikidata as a knowledge graph for the life sciences}\label{wikidata-as-a-knowledge-graph-for-the-life-sciences}}
+
+Due to its privileged position inside the linked data ecosystem and its ease of writing and query, Wikidata has been growing as a hub for interoperable data for the life sciences community. {[}\protect\hyperlink{ref-3GqlN9Dk}{96}{]} {[}\protect\hyperlink{ref-Ym2HoRLl}{97}{]}
+Even though Wikidata was created in 2013, the demand for a community-cured life sciences knowledge graph is apparent at least since 2008 {[}\protect\hyperlink{ref-179mXrGIk}{98}{]} {[}\protect\hyperlink{ref-TItj7EYf}{99}{]}
+The Wikidata-like project proposed was eventually discontinued, an example of the challenge of maintaining independent biomedical databases. {[}\protect\hyperlink{ref-P2QdZvGc}{100}{]}
+As Wikidata has a very large community, has stable funding and is at the core of modern technologies, like the Google Knowledge Graph {[}\protect\hyperlink{ref-xLpRePoh}{78}{]} and Amazon's Alexa, {[}\protect\hyperlink{ref-bO7BekzO}{101}{]} it is virtually guaranteed that data in Wikidata will remain accessible for a long time, regardless of local funding schemes.
+
+The Gene Wiki project {[}\protect\hyperlink{ref-18UXATsxP}{102}{]} was likely the first large scale biomedical project to rely directly on the Wikipedia infrastructure for community curation.
+It provided a direction connection between the generalist community of Wikipedia and domain experts.
+The interplay of both communities is a topic of discussion and the opportunities and challenges were already discussed in NAR in 2012. {[}\protect\hyperlink{ref-13LWXQF0E}{103}{]}\\
+Notably, Wikidata appeared chronologically after those efforts.\\
+Notwithstanding, the Gene Wiki research group has embraced the Wikidata environment for community biocuration and data interoperability {[}\protect\hyperlink{ref-2ZhxC0dg}{104}{]}{[}\protect\hyperlink{ref-DaJdrXLk}{105}{]} {[}\protect\hyperlink{ref-3GqlN9Dk}{96}{]} {[}\protect\hyperlink{ref-aQfGxPRH}{106}{]}.
+The information on Wikidata is still integrated to Wikipedias across multiple languages, often a a source of information in Wikipedia's infoboxes.
+
+Other projects outside the Gene Wiki initiative also started using Wikidata as a platform for knowledge integration.
+A list of several projects that use Wikidata as part of their service to their community is given in table \ref{tbl:wikidata_databases1}.
+There is a movement exploring how Wikidata can be employed to advance Computational Biology and how it can be integrated to the current publication status quo. {[}\protect\hyperlink{ref-1GijvCQtv}{107}{]}
+In that direction, Wikidata is being developed as a platform for scholarly linked open data, mainly via the Scholia platform {[}\protect\hyperlink{ref-hxzL9pmm}{108}{]} {[}\protect\hyperlink{ref-PdG2G4Bp}{109}{]},(\url{https://scholia.toolforge.org/}) which provides profiles of pre-templated SPARQL queries for entities like particular authors and articles (e.g.~Scholia profile on Prof.~Helder Nakaya available at \url{https://scholia.toolforge.org/author/Q42614737}).
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.1556}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.4000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.4444}}@{}}
+\caption{Samples of databases reconciled partially or totally to Wikidata
+\label{tbl:wikidata_databases}}\tabularnewline
+\toprule
+\begin{minipage}[b]{\linewidth}\raggedright
+name
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+project website
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+citation
+\end{minipage} \\
+\midrule
+\endfirsthead
+\toprule
+\begin{minipage}[b]{\linewidth}\raggedright
+name
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+project website
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+citation
+\end{minipage} \\
+\midrule
+\endhead
+LOTUS & \url{https://lotus.naturalproducts.net/} & {[}\protect\hyperlink{ref-P1EnNa7Q}{110}{]} \\
+GeneDB & \url{https://www.genedb.org/} & {[}\protect\hyperlink{ref-gqY9YdmH}{111}{]} \\
+Cellosaurus & \url{https://web.expasy.org/cellosaurus/} & {[}\protect\hyperlink{ref-HUr1iigG}{112}{]} \\
+Complex Portal & \url{https://www.ebi.ac.uk/complexportal/} & {[}\protect\hyperlink{ref-k4BJEMHE}{113}{]} \\
+WikiPathways & \url{https://www.wikipathways.org/} & {[}\protect\hyperlink{ref-pzgOjFLZ}{114}{]} \\
+Reactome & \url{https://reactome.org/} & {[}\protect\hyperlink{ref-1Fqp7ppqH}{115}{]} \\
+CIViC & \url{http://www.civicdb.org} & {[}\protect\hyperlink{ref-HUodcdz1}{116}{]} \\
+PubChem & \url{https://pubchem.ncbi.nlm.nih.gov} & {[}\protect\hyperlink{ref-HUodcdz1}{116}{]} \\
+Human Disease Ontology & \url{https://www.ebi.ac.uk/ols/ontologies/doid} & {[}\protect\hyperlink{ref-HUodcdz1}{116}{]} \\
+\bottomrule
+\end{longtable}
+
+During the COVID-19 pandemic, Wikidata has spawned as a hotspot for modelling information about the virus and the pandemic in real-time. {[}\protect\hyperlink{ref-zH3KDqhp}{117}{]} {[}\protect\hyperlink{ref-wikidata:99196713}{\textbf{wikidata:99196713?}}{]}
+The general scope of the database allowed representation in a shared system of molecular, epidemiologic and socio-economic aspects of the pandemic. {[}\protect\hyperlink{ref-zH3KDqhp}{117}{]}{[}\protect\hyperlink{ref-mPoPwN77}{118}{]}
+Information curated in Wikidata was immediately available, feeding live dashboards and other applications based on SPARQL queries. {[}\protect\hyperlink{ref-3YCzr3jU}{119}{]} {[}\protect\hyperlink{ref-SkOeuFRd}{120}{]} {[}\protect\hyperlink{ref-AOVCR8mW}{121}{]}
+Additionally, as the information presented on Wikidata is multilingual and collaboratively edited, it presented itself as a resource for constructing structured vocabularies in non-English languages. {[}\protect\hyperlink{ref-19wiU1LCA}{122}{]}
+
+In addition to its value as a structured database, Wikidata is tightly connected to Wikipedia.
+The gene identifiers in the context of Gene Wiki {[}\protect\hyperlink{ref-2ZhxC0dg}{104}{]} are now fed to Wikipedias across languages, benefitting users directly.
+Additionally, gene expression information from the Bgee database {[}\protect\hyperlink{ref-10EWNsZCz}{123}{]} was added to Wikidata and connected to Wikipedia, which led to a sizeable increase of access to the Bgee database.
+Currently, Wikipedia is one of the top 3 sources from which people access Bgee (personal communication with Tarcisio Farias), thus leading to direct recognition for integrated bases.
+More generally, the connections of Wikidata and Wikipedia make it unique in the power of flowing knowledge back to human-accessed interfaces.
+In the words of Matthias Samwald {[}\protect\hyperlink{ref-864Pcm4C}{124}{]} and colleagues, ``Wikidata could emerge as a community-backed and highly visible structured knowledge base of medical and biological information, bringing concepts and methodologies such as controlled taxonomies, Semantic Web / semantic technologies and ontologies into mainstream use.''
+
+In conclusion, Wikidata's unique position, robustness and guarantee of long term stability prompts the need for works exploring new ways of integrating it into current knowledge management systems.
+In light of the speed and breadth of the Human Cell Atlas and the challenges of knowledge representation on cells, this PhD works on addressing how Wikidata can play a role in organizing the discoveries about all human cell types.
+
+\hypertarget{objectives}{%
+\subsection{Objectives}\label{objectives}}
+
+\begin{itemize}
+\item
+  Study and refine theories of classes of cells within the constraints of ontologies and knowledge bases
+\item
+  Catalog a comprehensive list of currently described cell types
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Develop a biocuration framework connected to Wikidata
+  \item
+    Catalog as many cell types as possible
+  \end{itemize}
+\item
+  Devise ways to connect life-sciences resources to Wikidata:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Design and implement relations for making cell-type-related assertions
+  \item
+    Connect Wikidata to the Cell Ontology and other authoritative sources of identifiers
+  \item
+    Write bots and scripts to reconcile data sources to Wikidata
+  \end{itemize}
+\item
+  Provide proofs-of-concept of how Wikidata integration can benefit the advancement of the Human Cell Atlas Project
+\end{itemize}
+
+\hypertarget{methodology}{%
+\subsection{Methodology}\label{methodology}}
+
+This project's methodology resembles practical research-action practices {[}\protect\hyperlink{ref-11UV98PHT}{125}{]}.
+The ``action'' facet is done by contributing to projects in the Human Cell Atlas and knowledge management context.
+
+Research in 3 forms:
+- Philosophical investigation on knowledge representations of cell types, both in formal logic and in academic literature
+- Applied investigations of database integration and data quality in the context of Wikidata and biomedical ontologies
+- Data-driven biomedical research targeted at hypothesis generation and literature-based discovery using knowledge at the level of cell-type
+
+All research branches are linked to the improvement of knowledge management in biomedical sciences, focusing on the Human Cell Atlas.
+The methods included the development and application of a framework for an organized reading of the scientific literature, providing contact with the different facets of biocuration and Human Cell Atlas-related research.
+
+\hypertarget{organized-reading}{%
+\subsection{Organized reading}\label{organized-reading}}
+
+As much of the project is based directly on published research, we developed a reading framework, described in detail in the results section.
+The framework is based on GitHub and includes Python scripts, a file organizing the reading list, and another documenting the reading history in RDF.
+Notes and additional information are saved in a GitHub repository, and the structured information powers a live website with analytics on the users recent readings.
+The source code for Wikidata Bib is available at \url{https://github.com/lubianat/wikidata_bib/tree/template} and notes on my readings can currently be accessed at \url{https://lubianat.github.io/wikidata_bib/}.
+
+Additionally, the methodology included a discipline of reading that entails the daily task of reading 2 articles, one about ``cell types'' and another about ``biocuration''.
+The articles are obtained by a mixed manual and automatic approach, including a la carte selection of articles to read alongside Wikidata queries for Cell, Nature, Science and eLife papers about single-cell transcriptomics (query: \url{https://w.wiki/4LHr}) and papers on biocuration (query: \url{https://w.wiki/4LHi}).
+
+\hypertarget{biocuration-of-cell-classes-for-wikidata}{%
+\subsubsection{Biocuration of cell classes for Wikidata}\label{biocuration-of-cell-classes-for-wikidata}}
+
+For each article about cell types read, cell types previously absent on Wikidata are added via a combination of curation in a Google Spreadsheet and a custom Python script (https://github.com/lubianat/wikidata\_markers/tree/master/curation\_of\_classes).
+
+\hypertarget{wikidata-updates}{%
+\subsection{Wikidata updates}\label{wikidata-updates}}
+
+We have updated the Wikidata database with new entities, relations and triples.
+Creation of new entities was done in the Graphical User Interface (\url{https://www.wikidata.org/wiki/Special:NewItem}), via the batch Quickstatements tool (\url{https://quickstatements.toolforge.org/\#/}) and the Wikidata Integrator python library (\url{https://github.com/SuLab/WikidataIntegrator}).
+
+Properties, which link items to values need community approval. Under the scope of this PhD project, we have gotten the community approval for the properties :
+Cell Ontology ID (\url{https://www.wikidata.org/wiki/Property:P7963}) used to link cell types to their IDs in the Cell Ontology and has marker (\url{https://www.wikidata.org/wiki/Property:P8872}) used to link cell types to genes and proteins considered their markers.
+
+The property acceptance cycle takes at least one week and is open for opinions by any Wikidata user.
+All the information regarding property proposals is available at \url{https://www.wikidata.org/wiki/Wikidata:Property_proposal}.
+
+\hypertarget{cell-ontology-participation}{%
+\subsection{Cell Ontology participation}\label{cell-ontology-participation}}
+
+As part of the research-action process, I have joined the Cell Ontology working group.
+I participate in the monthly meetings and sporadic workshops, learning and contributing to the discussions.
+Additionally, I contribute to the ontology development, actively engaging in the Cell Ontology GitHub repository (\url{https://github.com/obophenotype/cell-ontology}) and contributing with new terms and assertions.
+I edit the ontology with the software for ontology editing Protégé v. 5.5.0 {[}\protect\hyperlink{ref-CHsAoEvr}{126}{]}.
+
+\hypertarget{status-of-cell-type-info-on-wikidata-and-the-cell-ontology}{%
+\subsubsection{Status of cell type info on Wikidata and the Cell Ontology}\label{status-of-cell-type-info-on-wikidata-and-the-cell-ontology}}
+
+Status of cell type information on Wikidata was accessed via SPARQL queries combined with processing in python and is available at \url{https://colab.research.google.com/drive/1GvQXOs51_U8icdGMtKXMeLOXKM8pXWet\#scrollTo=szvBWI9zr_AA}.
+
+Counts of cell classes in the Cell Ontology were performed via regex matching on Cell Ontology releases following the code available at \url{https://github.com/lubianat/cell_ontology_count}.
+
+\hypertarget{preliminary-results}{%
+\subsection{Preliminary results}\label{preliminary-results}}
+
+\hypertarget{concept-of-cell-types}{%
+\subsection{Concept of cell types}\label{concept-of-cell-types}}
+
+\hypertarget{general-work-on-the-concept-of-cell-type}{%
+\subsubsection{General work on the concept of cell type}\label{general-work-on-the-concept-of-cell-type}}
+
+As an initial step of this PhD project, we investigatet the definition of ``cell type'' for knowledge management on Wikidata.
+The definition of ``cell type'' is a topic of avid debate. {[}\protect\hyperlink{ref-paKiKTRS}{9},\protect\hyperlink{ref-sWv3okaH}{10},\protect\hyperlink{ref-19yYJWEkz}{11},\protect\hyperlink{ref-BlxFp1v3}{12},\protect\hyperlink{ref-eOUB1Bmj}{13},\protect\hyperlink{ref-TupzTvtA}{14},\protect\hyperlink{ref-w0Woz7JE}{15},\protect\hyperlink{ref-srfuRMe}{16},\protect\hyperlink{ref-1GXQByEaQ}{17},\protect\hyperlink{ref-k0Pe9YOB}{18},\protect\hyperlink{ref-pNGap1Du}{19},\protect\hyperlink{ref-MoaYZAA0}{20}{]}.
+Before we handled data in a large scale, we dedicated time for solidifying our theoretical basis of ``cell type''.
+
+In a preprint derived from this PhD project {[}\protect\hyperlink{ref-uCE45Jh8}{127}{]}, we proposed naming conventions for different cell types classes.
+Much of the literature uses the same names for single species (e.g., when dealing with a cell type as an evolutionary unit) or multiple species (e.g., in the Cell Ontology).
+Fe find it helpful to distil these different cases into different categories.
+Given the importance of the species' concept in biological classification {[}\protect\hyperlink{ref-AHGRV6KQ}{128}{]}, we derive a species-centric view on naming classes of cell types.
+Using the notion of ``taxonomic scope'' as the taxonomic range in which instances of the class are expected to materialize, we propose 4 classes (Figure \ref{fig:classes}):
+
+\begin{itemize}
+\tightlist
+\item
+  archetypes, for when the taxonomic scope of the type is beyond the level of species; for example, ``mammal neutrophils.'' Note that this also includes species-neutral cell types, which are assumed to display instances in multiple species.
+\item
+  \emph{sensu stricto} cell types, for when the taxonomic scope of the type corresponds to a single species; for example, \emph{Mus musculus} neutrophils.''
+\item
+  infratypes, for when the taxonomic scope is below the species level; for example, considering the mouse strain ``C57BL/6J'', ``neutrophils from C57BL/6J mice''.
+\item
+  technotypes, for specific, experimentally defined cell types that harbor in their definition the precise conditions of the cells sampled; ``2-month-old male C57BL/6J, Ly-6G+ CD11b+ M-CSF R- CD244- neutrophils''.
+\end{itemize}
+
+\begin{figure}
+\hypertarget{fig:classes}{%
+\centering
+\includegraphics{https://raw.githubusercontent.com/lubianat/fapesp_report_1/main/content/images/archetypes_hn.jpg}
+\caption{Names for classes of cell types.}\label{fig:classes}
+}
+\end{figure}
+
+By specifying 4 different categories of cell types, we can hone in our organization.
+While resources often do not make the taxonomic scope explicit, it might be inferred.
+For example, the vast majority of biomedical articles present experiments with a single strain or a single species.
+While two articles using different species might call some cells by the same name, they have important intrinsic differences.
+Even if functionally equivalent, a mouse fibroblast can never become a human fibroblast, no matter the protocol.\\
+While implicitly obvious, for computer-based, large scale knowledge management, it becomes necessary to state the obvious.
+
+The division between archetypes and \emph{sensu stricto} cell types is of particular importance for biocuration and data annotation.
+Usually, names and identifiers for genes and proteins are standardized for single species.{[}\protect\hyperlink{ref-baJRsCMu}{129}{]}
+Thus, if we want to annotate marker genes, we would do better associating them to a species-specific cell type (a \emph{sensu stricto} cell type) instead of the more vague association to a species-neutral type.
+Of note, current scRNAseq reference datasets and databases still use species-neutral cell type IDs(e.g.~in the reference HuBMAP app; \url{https://azimuth.hubmapconsortium.org/references/}).
+
+Our theoretical discussion on the notion of ``cell type'' extends the current state-of-the-art and introduces new ways to organize our knowledge about cells.
+The technotype and the infratype are currently pure theoretical constructs, and almost no resources deal with cell types at the level of strains or below.
+While we reason that this level of granularity would provide a more precise description of research projects, they are still far from being applicable in the present, and are present as tools for the future.
+The division of archetypes and \emph{sensu stricto} cell types, on the other hand, was immediate value.
+As an example, it was instrumental for the integration of the Panglao database of cell markers to Wikidata, described in the following session of the results.
+
+\hypertarget{a-simplified-definition}{%
+\subsubsection{A simplified definition}\label{a-simplified-definition}}
+
+While theoretical discussion on the notion of ``cell type'' are important, a reasonable consensus is likely to take longer than the duration of this PhD project.
+Here we adopt a liberal view of cell type, defining, for our purposes, a cell type as any class of cells described by a domain expert with evidence of the reality of its instances.
+The requirement of evidence of existence in the material world is based on the principle of instantiation of ontological realism {[}\protect\hyperlink{ref-5ZFRyTy5}{130}{]}. Barry Smith and Werner Ceuster state ``A term should be included in a reference ontology only if there is experimental evidence that instances to which that term refers exist in reality. (`Exists' here should be understood in a tenseless sense in order to accommodate, for example, universals pertaining to extinct species as well as universals such as swarm or hurricane which are instantiated only intermittently.)''
+Following their advice, our minimum requirement for a cell type is public evidence for materializations of its instances.
+
+By ``type'', or ``class'', we mean an abstract entity in a sense intended by the multilevel theory (MLT) of conceptual modelling {[}\protect\hyperlink{ref-eP47FILn}{131}{]}
+Figure \ref{fig:multilevel} displays a simplified version of MLT adopted throughout this project.
+In this framework, real-world entities are materializations of \emph{individuals}.
+\emph{Individuals} are theoretical constructs that are (1) thought to exist or have existed, as per the principle of instantiation, and (2) refer to only one material entity at any point in time.
+For example, Wikidata's entries for ``Helder Nakaya (\href{https://www.wikidata.org/wiki/Q42614737}{Q42614737})'' and ``Charles Darwin (\href{https://www.wikidata.org/wiki/Q42614737}{Q1035})'' are considered \emph{individuals} by Multi-Level Theory.
+Other examples of \emph{individuals} include ``Albert Einstein's brain (\href{https://www.wikidata.org/wiki/Q2464312}{Q2464312})'' and the ``Christ the Redeemer statue (\href{https://www.wikidata.org/wiki/Q79961}{Q79961})''.
+
+\begin{figure}
+\hypertarget{fig:multilevel}{%
+\centering
+\includegraphics[width=0.85\textwidth,height=\textheight]{https://raw.githubusercontent.com/lubianat/multilevel_ontology_drawings/master/combination_human_cell.png}
+\caption{A multilevel theory (MLT) can divide the theoretical realm into different kingdoms. A) A representation of people in the MLT framework as adopted in this work. The theoretical-realm entity ``Mahatma Gandhi'' is materialized by the material-realm Mahatma Gandhi. The theoretical \emph{individual} is considered an instance of multiple \emph{classes} such as ``Indian lawyer'' and ``\emph{Homo sapiens}'', which are related to each other via subclass relations. The classes themselves are instances of \emph{metaclasses}, like ``taxon'', a first-order metaclass. B) An analogous representation of the MLT framework, but applied to cells and cell types.}\label{fig:multilevel}
+}
+\end{figure}
+
+In MLT, \emph{individuals} are instances of some \emph{classes}.
+For example, both ``Helder Nakaya (\href{https://www.wikidata.org/wiki/Q42614737}{Q42614737})'' and ``Charles Darwin (\href{https://www.wikidata.org/wiki/Q42614737}{Q1035})'' could be represented as instances of the class ``\emph{Homo sapiens} (\href{https://www.wikidata.org/wiki/Q15978631}{Q15978631})''.
+``\emph{Homo sapiens} (Q15978631)'' is only one of the classes that those individuals belong to.
+Another one is ``animal (\href{https://www.wikidata.org/wiki/Q729}{Q729})''.
+As all instances of ``\emph{Homo sapiens} (Q15978631)'' are also instances of ``animal (Q729)'', ``\emph{Homo sapiens} (Q15978631)'' is a subclass of ``animal (Q729)''.
+It is possible to continue the hierarchy of subclasses: ``animal (Q729)'' is a subclass of ``organism (Q7239)'', and so on until the root case ``entity (\href{https://www.wikidata.org/wiki/Q35120}{Q35120})''
+
+Classes can also behave as individuals in some aspects.
+For example, both ``\emph{Homo sapiens} (Q15978631)'' and ``animal (Q729)'' are instances of ``taxon (\href{https://www.wikidata.org/wiki/Q16521}{Q16521})''.
+``Taxon (Q16521)'', thus, is a \emph{metaclass}, or, more precisely, a \emph{1st-order metaclass}.
+Other examples of metaclasses are ``\emph{species} (\href{https://www.wikidata.org/wiki/Q7432}{Q7432})'' and ``phylum (\href{https://www.wikidata.org/wiki/Q38348}{Q38348})''.
+These, in turn, are instances of ``taxonomic rank (\href{https://www.wikidata.org/wiki/Q427626}{Q427626})'', a \emph{2nd-order metaclass}.
+
+In the Figure \ref{fig:multilevel} B there is a proposal of this version of MLT for cell types.
+As individual cells are rarely named, for the sake of example, we can consider the ``zygote of Mahatman Gandhi'' as an \emph{individual} in the theoretical system, an instance of the \emph{class} ``zygote (\href{https://www.wikidata.org/wiki/Q170145}{Q170145})''.
+``Zygote(Q170145)'' is an instance of the \emph{metaclass} ``cell type (\href{https://www.wikidata.org/wiki/Q189118}{Q189118})''
+A more concrete example of from RNA-sequencing datasets, where there are barcodes for each cell in a particular sample.
+Each barcode labels an \emph{individual}.
+Thus, labelling single-cells is a process of identification, where each \emph{individual} is connected to a \emph{class} of interest.
+
+We avoid the dissection of the differences between persistent classes of cells (often called ``cell types'') or the transient, fugacious classes of cells (often called ``cell states'') (see ``Definition of cell identity'' section in {[}\protect\hyperlink{ref-pFijpXkl}{132}{]} for an example). We also consider only the cell as it was observed in an experiment, not necessarily the future conditions of any cell (i.e., the ``cell fate''). {[}\protect\hyperlink{ref-OjxQDZpx}{35}{]}\\
+Even though such a distinction is an important topic for theoretical research, it is outside the initial scope of this work.
+
+Another consequence of is that ``subtype'' becomes redundant with the idea of cell type and differ only stylistically.
+The notion of subtype, only will make sense in context of superclasses, but all in the same kingdom (i.e.~the kingdom of classes).
+
+We opted to frame our work around the term ``cell type'' due to its historical usage and familiarity for the life sciences community.
+The term ``cell class'' is also used in the literature and is a suitable synonym for our notion of cell type.
+Other related terms present semantic ambiguities, and were avoided whenever possible.
+For example, terms as ``cell set,'' ``cell population,'' and ``cell cluster,'' can reminisce of a specific, countable group of cells, frequently from the same experiment.
+The term ``cell identity'' has also been suggested for avoiding the cell type/cell state dilemma {[}\protect\hyperlink{ref-WKbly37M}{46}{]}, but we avoid it to emphasize a nominalistic perspective (in the Popperian sense{[}\protect\hyperlink{ref-1C6LI68h6}{133}{]}).
+In doing so, we reinforce the intent to represent the cell types \emph{reported to exist} instead of stating bluntly which cell types \emph{exist} or are \emph{essential} for human beings.
+
+The employment of MLT and species-specific cell type are instrumental for the next chapters of this work.
+In the chapter about the PanglaoDB integration, we describe how we applied the theory to add marker information to Wikidata and cleaned up conceptual disarrays throughout the platform.
+Later, on the chapter about Wikidata Bib, we describe how we performed a large-scale curation of the biomedical literature for new cell types, using the theories discussed here as a starting principle.
+
+\hypertarget{panglaodb-integration-to-wikidata}{%
+\subsection{PanglaoDB integration to Wikidata}\label{panglaodb-integration-to-wikidata}}
+
+\hypertarget{introduction}{%
+\subsubsection{Introduction}\label{introduction}}
+
+Biomedical databases gather structured information for end users.
+They are present in different states of maintenance, and reconciling cell-oriented databases to Wikidata has the potential to increase interoperability, and multiply the value of previous biocuration efforts.
+PanglaoDB {[}\protect\hyperlink{ref-M0lqRYJb}{134}{]} {[}\protect\hyperlink{ref-T3PlZ3Vh}{135}{]} is a publically-available database that contains data and metadata on hundreds of single-cell RNA sequencing experiments.
+It provides extensive information on cell types, genes, tissues, and cell type markers, obtained via automatic and manual methods.
+It also displays a rich web user interface for easy data acquisition, including database dumps for bulk downloads.
+
+As of 8 December June 2021, the article describing PanglaoDB had been cited 230 times.
+Despite its use by the community, the database is on a 3-star category for Linked Open Data {[}\protect\hyperlink{ref-OGXYtGZ8}{136}{]} as it does not use the open semantic standards from W3C (RDF and SPARQL) needed for a 4-star rank, neither the links to external data via standard identifiers that make datasets 5-star.
+Improving the data format is a valuable step in making biological knowledge FAIR (Findable, Accessible, Interoperable, and Reusable).
+Thus, we provide a case study of making PandlaoDB available in a 5-star Linked Open Data Format on Wikidata.
+
+As of August 2020, Wikidata had 264 items categorized as a ``cell type'', considerably less than the Cell Ontology, which counts over two thousand cell types {[}\protect\hyperlink{ref-agnqfdk6}{52},\protect\hyperlink{ref-4AEy2xhQ}{137}{]}.
+Strikingly, there were also 23 items categorized as instances of ``cell (Q7868)''.
+This classification is imprecise, as an instance of cell would be an individual named cell from a single named individual, an example of conceptual disarray that often occurs on Wikidata. {[}\protect\hyperlink{ref-imSZTi52}{138}{]}
+
+Wikidata editors often mix 1st-order classes such as ``cells'' and ``organs'' with metaclasses like ``cell types'' and ``organ types''.
+As mentioned in the chapter on the concept of cell type and Multi Level Theory, individuals, like the ``Dolly sheep zygote'' and the ``brain of Albert Einstein'' are instances of classes like ``zygote'' and ``brain'', respectively.
+Classes, like ``zygote'' and ``brain'' are instances of \emph{metaclasses}, like ``cell type'' or ``organ type''.
+
+We diligently fixed and improved the conceptual consistency of cell type entries on Wikidata.
+As of 8 December 2021, the Wikidata database contains 2834 instances of ``cell type'' (see current status at \url{https://w.wiki/b2t}) and 0 instances of ``cell'' (\url{https://w.wiki/4XAg}) highlighting the improvements in both quantity and quality.
+This increase stems from the PanglaoDB integration (around 430 new types) and the Wikidata Bib curation described later.
+
+\hypertarget{methodology-for-panglaodb-integration}{%
+\subsubsection{Methodology for PanglaoDB integration}\label{methodology-for-panglaodb-integration}}
+
+After obtaining approval from the database owners, we matched genes and cell types to Wikidata and performed Wikidata queries to demonstrate the value of the approach.
+An overview of the process is shown in \ref{fig:iscb_intro}.
+\includegraphics[width=0.85\textwidth,height=\textheight]{https://github.com/lubianat/fapesp_report_1/blob/main/content/images/poster_ISCB_intro.png?raw=true}
+
+\hypertarget{class-creation-on-wikidata}{%
+\subsubsection{Class creation on Wikidata}\label{class-creation-on-wikidata}}
+
+Classes corresponding to species-neutral classes were curated from Wikidata using Wikidata's Graphic User Interface.
+A manually-curated dictionary matching terms in PanglaoDB to Wikidata identifiers was assembled and used for integration.
+Cell types that were not represented on Wikidata were added to the database via the graphical user interface (\url{https://www.wikidata.org/wiki/Special:NewItem}) and logged in the reference table.
+
+Species-specific cell types for human and mouse cell types were created for every entry in the reference table and connected to the species-neutral concept via a ``\href{http://www.wikidata.org/entity/P279}{subclass of}'' property (e.g.~every single ``\href{http://www.wikidata.org/entity/Q101405102}{human neutrophil}'' is a also ``\href{http://www.wikidata.org/entity/Q188417}{neutrophil}'').
+Our approach was analogous to the one taken by the CELDA ontology to create species-specific cell types. {[}\protect\hyperlink{ref-RLHsA1U8}{139}{]}
+
+\hypertarget{integration-of-panglaodb-to-wikidata}{%
+\paragraph{Integration of PanglaoDB to Wikidata}\label{integration-of-panglaodb-to-wikidata}}
+
+After receiving authorization by e-mail from the PanglaoDB developer, Oscar Franzen, the PanglaoDB markers dataset was downloaded manually from PanglaoDB's website (\url{https://panglaodb.se/markers/PanglaoDB_markers_27_Mar_2020.tsv.gz}) for integration. It contains 15 columns and 8256 rows. Only the columns \texttt{species}, \texttt{official\ gene\ symbol}, and \texttt{cell\ type} were used for the reconciliation.
+The reconciled dataset was uploaded to Wikidata via the WikidataIntegrator Python package {[}\protect\hyperlink{ref-qDI8I4IJ}{95}{]}, a wrapper for the Wikidata Application Programming Interface.
+
+\hypertarget{sparql-queries}{%
+\paragraph{SPARQL queries}\label{sparql-queries}}
+
+Besides the Wikidata Dumps, Wikidata provides a SPARQL endpoint with a Graphical User Interface (\url{https://query.wikidata.org/}).
+Updated data was immediately accessible via this endpoint, enabling integrative queries integrated with other database statements.
+
+\hypertarget{overview-of-integrated-information-on-wikidata}{%
+\subsubsection{Overview of integrated information on Wikidata}\label{overview-of-integrated-information-on-wikidata}}
+
+\hypertarget{cell-marker-information-on-wikidata}{%
+\paragraph{Cell Marker information on Wikidata}\label{cell-marker-information-on-wikidata}}
+
+Adding marker information on Wikidata was not possible before this study and became possible after we proposed and got community approval of the property ``has marker'' (P8872).
+Figure \ref{fig:chat_marker} shows 2 of the current markers of ``human colinergic neuron''(\href{http://www.wikidata.org/entity/Q101405051}{Q101405051}), \href{http://www.wikidata.org/entity/Q14863671}{CHAT} and \href{http://www.wikidata.org/entity/Q407983}{ACHE}, as they are seen on Wikidata.
+The PanglaoDB is referenced both via URL to the website (\url{https://panglaodb.se/markers.html}) and a pointer to the PanglaoDB item on Wikidata, \href{http://www.wikidata.org/entity/Q99936939}{Q99936939}.
+
+\begin{figure}
+\hypertarget{fig:chat_marker}{%
+\centering
+\includegraphics[width=0.85\textwidth,height=\textheight]{https://github.com/lubianat/fapesp_report_1/blob/main/content/images/chat_marker.png?raw=true}
+\caption{Subset of the marker genes for item Q101405051 (human cholinergic neuron)}\label{fig:chat_marker}
+}
+\end{figure}
+
+Now that we re-formatted the markers on PanglaoDB as Linked Open Data, we can make queries that were not possible before, including federated queries with other biological databases, such as Uniprot {[}\protect\hyperlink{ref-HUJ9NzAb}{140}{]}
+and Wikipathways {[}\protect\hyperlink{ref-AgOOCR24}{141}{]}.
+Due to previous similar reconciliation projects, Wikidata already contains information about genes, including their relations to Gene Ontology (GO) terms.
+
+PanglaoDB's integration to the Wikidata ecosystem allows us to ask various questions (figure \ref{fig:iscb_results}).
+
+\begin{figure}
+\hypertarget{fig:iscb_results}{%
+\centering
+\includegraphics[width=0.85\textwidth,height=\textheight]{https://github.com/lubianat/fapesp_report_1/blob/main/content/images/poster_ISCB_results.png?raw=true}
+\caption{SPARQL queries in Wikidata now harness information from Panglao DB. Queries with the above design were run on Wikidata. Results might change in real-time with Wikidata updates by contributors A-C) Graphical representation of feasible SPARQL queries (https://w.wiki/yQ6, https://w.wiki/yQD and https://w.wiki/3HjX,). D) Sample result from query C.}\label{fig:iscb_results}
+}
+\end{figure}
+
+\hypertarget{which-human-cell-types-are-related-to-neurogenesis-via-their-markers}{%
+\subsubsection{``Which human cell types are related to neurogenesis via their markers?''}\label{which-human-cell-types-are-related-to-neurogenesis-via-their-markers}}
+
+As expected, the query below retrieved a series of neuron types, such as ``\href{https://www.wikidata.org/wiki/Q101404913}{human Purkinje neuron}'' and ``\href{https://www.wikidata.org/wiki/Q101405091}{human Cajal-retzius cell}.'' It also retrieved non-neural cell types such as the ``\href{https://www.wikidata.org/wiki/Q101405109}{human loop of Henle cell}, a kidney cell type, and''\href{https://www.wikidata.org/wiki/Q101404928}{human osteoclast}.
+These seemingly unrelated cell types markedly express genes involved in neurogenesis, but that does not mean that they are involved with this process.
+The unexpected results reinforce that one needs to be careful when using curated pathways to analyze gene sets, as false positives abound.
+
+The molecular process that gene products take part depends on the cell type.
+SPARQL allows us to seamlessly compare Gene Ontology processes with cell marker data, providing a sandbox to generate hypotheses and explore the biomedical knowledge landscape.
+
+\begin{longtable}[]{@{}ll@{}}
+\caption{Sample of 10 cell types related to neurogenesis via markers (07/02/2020, full query on \url{https://w.wiki/yQ6}).
+\label{tbl:neuro}}\tabularnewline
+\toprule
+geneLabel & cellTypeLabel \\
+\midrule
+\endfirsthead
+\toprule
+geneLabel & cellTypeLabel \\
+\midrule
+\endhead
+OMP & human purkinje neuron \\
+OMP & human olfactory epithelial cell \\
+OMP & human neuron \\
+EPHB1 & human oligodendrocyte \\
+EPHB1 & human osteoclast \\
+PCSK9 & human delta cell \\
+PCSK9 & human loop of Henle cell \\
+CXCR4 & human b cell \\
+CXCR4 & human T cell \\
+CXCR4 & human NK cell \\
+\bottomrule
+\end{longtable}
+
+\hypertarget{which-cell-types-express-markers-associated-with-parkinsons-disease}{%
+\subsubsection{``Which cell types express markers associated with Parkinson's disease?''}\label{which-cell-types-express-markers-associated-with-parkinsons-disease}}
+
+Besides integration with Gene Ontology, Wikidata reconciliation connects the marker gene info on PanglaoDB with disease markers.
+
+Disease genes are often compiled from Genomic Wide Association Studies, which look for sequence variation in the DNA.
+These studies are commonly blind to the cell types related to the pathophysiology of the disease.
+In the query below, we can see cell types marked by genes genetically associated with Parkinson's disease.
+Even considering the false positives, the overview can aid domain experts in coming up with novel hypotheses.
+
+\begin{longtable}[]{@{}lll@{}}
+\caption{Sample of 5 cell types related to Parkinson's disease via markers (07/02/2020, full query on \url{https://w.wiki/yQD}).
+\label{tbl:parkinson}}\tabularnewline
+\toprule
+geneLabel & diseaseLabel & cellTypeLabel \\
+\midrule
+\endfirsthead
+\toprule
+geneLabel & diseaseLabel & cellTypeLabel \\
+\midrule
+\endhead
+BST1 & Parkinson's disease & human b cell \\
+BST1 & Parkinson's disease & human neutrophil \\
+RIT2 & Parkinson's disease & human neuron \\
+SH3GL2 & Parkinson's disease & human alpha cell \\
+SH3GL2 & Parkinson's disease & human beta-cell \\
+\bottomrule
+\end{longtable}
+
+\hypertarget{discussion-and-conclusion}{%
+\subsection{Discussion and conclusion}\label{discussion-and-conclusion}}
+
+In this part of the PhD project, we re-released the knowledge curated in PanglaoDB on Wikidata, connecting it to the semantic web.
+Each cell-type/marker statement was added to Wikidata with a pointer to PanglaoDB and a citation of the article, providing proper provenance.
+Based on the theoretical considerations on the concept of cell type, we added species-specific terms to Wikidata for cell types of \emph{Homo sapiens} and \emph{Mus musculus} described in the PanglaoDB database.
+
+This work exemplifies the power of releasing Linked Open Data via Wikidata, and provides the biomedical community with the first semantically accessible, 5-star LOD dataset of cell markers, easily reachable from Wikidata's SPARQL Query Service (\url{https://query.wikidata.org/}).
+Alongside other case studies of biomedical data integration to Wikidata (see {[}\protect\hyperlink{ref-mPoPwN77}{118}{]}, it contributes with tools and practices to serve as basis for contributors.)
+The work also paves the way for reconciling of other databases for cell-type markers, such as CellMarker {[}\protect\hyperlink{ref-chGii6yw}{51}{]}, labome {[}\protect\hyperlink{ref-rhRRCtlA}{142}{]}, CellFinder {[}\protect\hyperlink{ref-4AEy2xhQ}{137}{]} and SHOGoiN/CELLPEDIA {[}\protect\hyperlink{ref-6uWWsiSq}{143}{]}) (if the owners give proper authorization).
+The approach we took here can be applied to any knowledge set of public interest, providing a low-cost and low-barrier platform for sharing biocurated knowledge in gold-standard format.
+
+\hypertarget{wikidata-bib-and-a-professional-system-for-biocuration}{%
+\subsection{Wikidata Bib and a professional system for biocuration}\label{wikidata-bib-and-a-professional-system-for-biocuration}}
+
+\hypertarget{introduction-1}{%
+\subsubsection{Introduction}\label{introduction-1}}
+
+Reading scientific articles is an integral part of the routine of modern scientists.
+Although several literature-management software are available {[}\protect\hyperlink{ref-SdbIYKUa}{144}{]}, the process of reading is mainly artisanal.
+There are no standard guidelines on how to probe the literature organize notes for biomedical researchers.
+Thus, while reading and studying is a core activity, there are few (if any) protocols for the efficient screening of scientific articles.
+
+Other professional traditions have dealt with similar issues in the past.
+Notetaking is vital to keep track of financial balances and avoid costly problems in accounting.
+Double-entry bookkeeping was developed in the 13th century as a professional solution for notetaking in accounting where ``every entry to an account requires a corresponding and opposite entry to a different account.'' {[}\protect\hyperlink{ref-uYuz0opI}{145}, =Double-entry\_bookkeeping\&oldid=1055066428{]}
+In software development, Test-Driven Development (TDD) is a popular methodology where tests for code snippets are written before the code itself, therefore ensuring that written software passes minimum quality standards.
+The similarities of Double-entry bookkeeping and TDD are diverse {[}\protect\hyperlink{ref-KNGv5MPp}{146}{]}, but for our purpose, here suffices to see both as professionalized systems that promote better quality and accountability of works.
+
+In the humanities, there is a well-established practice of annotations of readings.
+The annotation skills are part of standard academic training in the humanities {[}\protect\hyperlink{ref-rPKBwmYh}{147}{]}{[}\protect\hyperlink{ref-url}{\textbf{url?}}{]}.
+An influential work in presenting methods for academic reading in the humanities is Umberto Eco's book ``How to Write a Thesis'' {[}\protect\hyperlink{ref-1HBVPtZGp}{148}{]}, which outlines not only \emph{how} to annotate the literature that basis an academic thesis, but also \emph{why} to do so.
+The book, written originally in 1977, is still influential today.
+Still, its theoretical scope (roughly the humanities) and its date preceding the digital era limits the extent to which it applies to the biomedical sciences.
+
+Notably, the need for an organized reading system for biocuration studies stems from a difference in methodology.
+In humanities, the main (if not sole) research material is the written text, the books and articles from which research stems---{[}\protect\hyperlink{ref-url}{\textbf{url?}}{]}.
+In the biomedical sciences, including a large part of bioinformatics, the object of study is the natural world, observed via experimentation.
+Thus, naturally, scientific training focuses on experimentation and data analysis's theoretical and practical basis.
+With the boom of scientific articles, however, the scientific literature (and accompanying public datasets) already provide a strong material for sculpting scientific projects.
+Thus, developing a methodology for academic reading tailored to the digital environment is a need.
+
+This chapter concerns itself with presenting Wikidata Bib, a framework for large scale reading of scientific articles.
+It is presented in three parts, each with a technical overview alongside the theoretical foundations.
+First, Wikidata Bib is presented as a reading system for managing references and notes using a GitHub repository and plain text notes.
+Then, we present how the system ensures accountability, allowing users to get personalized analytics on their reading patterns.
+Finally, we demonstrate how Wikidata Bib fits an active curation environment, connecting the framework with the larger goal of this project of curating information about cell types on Wikidata.
+
+\hypertarget{wikidata-bib-as-a-reading-system}{%
+\subsection{Wikidata Bib as a reading system}\label{wikidata-bib-as-a-reading-system}}
+
+The reading framework of Wikidata bib is built upon a git repository integrated with GitHub, Python3 scripts and SPARQL queries.
+It has a standard file structure, summarized as the following:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{docs/}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \texttt{index.html}
+  \end{itemize}
+\item
+  \texttt{downloads/}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \texttt{10.7554\_ELIFE.52614.pdf}
+  \end{itemize}
+\item
+  \texttt{notes/}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \texttt{Q87830400.md}
+  \end{itemize}
+\item
+  \texttt{src/}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \texttt{get\_pdf.py}
+  \item
+    \texttt{helper.py}
+  \item
+    \texttt{read\_paper.py}
+  \item
+    \texttt{update\_dashboard.py}
+  \end{itemize}
+\item
+  \texttt{index.md}
+\item
+  \texttt{toread.md}
+\item
+  \texttt{config.yaml}
+\item
+  \texttt{pop}
+\item
+  \texttt{wadd}
+\item
+  \texttt{wadd\_all}
+\item
+  \texttt{wread}
+\item
+  \texttt{wlog}
+\end{itemize}
+
+The \texttt{docs/} directory contains the live dashboard from the readings, which will be discussed in the following sessions.
+The \texttt{downloads/} directory hosts the pdfs of the articles read with the system.
+These are not committed to the repository and are only stored locally.
+The \texttt{notes/} directory contains markdown files, one for each article read.
+The \texttt{src/} directory contains the python code with the system's mechanics.
+They contain helper functions for the command line commands discussed below:
+- \texttt{wread} which receives a Wikidata QID for an article and outputs (1) a notes document, (2) a pdf for the paper obtained from Unpaywall {[}\protect\hyperlink{ref-15luL9zZC}{149}{]} and (3) an updated version of the dashboard HTML files in the \texttt{docs/} directory.
+- \texttt{pop}, which ``pops'' an article from \texttt{toread.md} and runs \texttt{wread} for it
+- \texttt{wadd}, which takes an URL for a Wikidata SPARQL query and adds new QIDs to \texttt{toread.md}
+- \texttt{wadd\_all}, which parses \texttt{config.yaml} for recurrent SPARQL queries and runs \texttt{wadd} for each
+- \texttt{wlog}, which adds, commits and pushes recent readings and dashboard updates to GitHub
+
+All the structures described so far are commonly shared by any user of Wikidata Bib.
+To personalize the use of the system, the user edits three plain text files.
+\texttt{toread.md} hosts plain text QIDs of the articles that will be read.
+These can be added either manually or via wadd.
+While the \texttt{pop} command only sees QIDs, articles titles or other identifiers can temporarily be added to \texttt{toread.md} without breaking the system.
+\texttt{index.md} hosts a numbered list of topics of interest.
+This file plays the role of Umberto Eco's work plan, with the topics of interest for the academic. {[}\protect\hyperlink{ref-1HBVPtZGp}{148}{]}
+These are used to tag articles for retrieval in a later step.
+\texttt{config.yaml} contains shortcuts for different reading lists.
+This is better explained by example.
+In my \texttt{to\ read.md} file there are two reading lists, one following a \texttt{\#\ Cell\ types} header and another following a \texttt{\#\ Biocuration} header.
+My \texttt{config.yaml} contains the following snippet:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{lists}\KeywordTok{:}
+\CommentTok{\# {-} shortcut: Title of header in toread.md  }
+\AttributeTok{  }\FunctionTok{ct}\KeywordTok{:}\AttributeTok{ Cell types}
+\AttributeTok{  }\FunctionTok{bioc}\KeywordTok{:}\AttributeTok{ Biocuration}
+\end{Highlighting}
+\end{Shaded}
+
+The \texttt{config.yaml} shortcuts are used as arguments by the \texttt{pop} command, where \texttt{\$\ ./pop\ ct} retrieves an article from the ``Cell types'' list, while \texttt{\$\ ./pop\ bioc} retrieves an article from the ``Biocuration'' list.
+
+The Wikidata bib framework is coupled with a discipline of daily reading.
+The discipline is inspired by Robert Cecil Martin's description of Test Driven Development in the book ``Clean Code'', which includes not only a technical description but a \emph{school of thought} of how software development might be approached. {[}\protect\hyperlink{ref-13HqB23xH}{150}{]}
+Every day, I read one article of each list, using the notetaking station displayed in Figure {[}\protect\hyperlink{ref-fig}{\textbf{fig?}}{]}: notetaking.
+The constancy of reading allows steady coverage of the relevant literature.
+While the discipline has worked for this research project, it is not required to use the Wikidata Bib system.
+
+The notetaking station of Wikidata Bib, opened in Virtual Studio Code, is depicted on Figure {[}\protect\hyperlink{ref-fig}{\textbf{fig?}}{]}: notetaking A.
+The title and publication dates are displayed, and the reading process entails copying snippets from the text to the ``Highlights'' session.
+Copying the highlights into plain text makes the sections of interest searchable via command line using \texttt{grep} (https://en.wikipedia.org/w/index.php?title=Grep\&oldid=1039541979).
+Comments can be added either in the comment section or inline, alongside the highlights, using \texttt{-\/-\textgreater{}\ Comment\ goes\ here} to differentiate from highlights.
+Also searchable by \texttt{grep} are the tags, copied and pasted from \texttt{index.md} in the \texttt{\#\#\ Tags} session or alongside the main article.
+
+The discipline also includes, whenever possible, an improvement of the metadata about the article on Wikidata.
+In {[}\protect\hyperlink{ref-fig}{\textbf{fig?}}{]}: notetaking B are shown the links included in the dashboard.
+A link to a Scholia {[}\protect\hyperlink{ref-hxzL9pmm}{108}{]} profile allows identification of related articles from a series of pre-made SPARQL queries probing bibliography data on Wikidata.
+While Scholia provides an overview of a given article, it does not allow direct curation of the metadata.
+For that, two links are provided, one to Wikidata and one to Author Disambiguator {[}\protect\hyperlink{ref-1A9RvszKC}{151}{]}.
+By accessing the Wikidata page for the entity, one can add new triples, for example, curating authors and topics of the article, which are then used by Scholia and by Wikidata Bib's dashboard.
+Author Disambiguator is a wrapper of an Wikimedia API that facilitates disambiguating author names to unique identifiers on Wikidata, thus feeding the public knowledge graph of publication and authors.\\
+Finally, a link to the article's DOI or full-text URL is provided and serves as a fallback when the automatic download fails.
+Of note, while the metadata curation has a technical benefit to Wikidata and the dashboard, it also plays a theoretical role.
+By curating metadata on authors, the user of Wikidata Bib can better understand the people they read, and expand their metascientific perspective on their domain of interest.
+
+\begin{figure}
+\hypertarget{fig:notetaking}{%
+\centering
+\includegraphics{images/note_taking_station_annotated_with_links.png}
+\caption{Wikidata Bib's platform for note taking}\label{fig:notetaking}
+}
+\end{figure}
+
+The source code for Wikidata Bib is available at \url{https://github.com/lubianat/wikidata_bib}.
+
+\hypertarget{wikidata-bib-as-a-dashboard}{%
+\subsection{Wikidata Bib as a dashboard}\label{wikidata-bib-as-a-dashboard}}
+
+The Wikidata Bib system also enables the reader to get statistics on their readings.
+Two simple databases are stored on the GitHub repository:
+* \texttt{read.ttl} - An RDF document recording the dates in which each article was read.
+* \texttt{read.csv} - An simple, human-readable index connecting QIDs with article titles.
+The CSV file is only stored for accountability and as a quick way to glance at the titles read.
+The .ttl file, on the other hand, is processed by the \texttt{update\_dashboard.py} script to render 4 different HTML files under the \texttt{docs/} folder:
+- \texttt{index.html}
+- \texttt{last\_day.html}
+- \texttt{past\_week.html}
+- \texttt{past\_month.html}
+All files are displayed in a GitHub pages.
+In the case of this work, they are displayed at \url{https://lubianat.github.io/wikidata_bib/}.
+
+To organize the code for rendering the dashboard, we created a python package, wbib, and deposited it in PyPi, making it available via \texttt{pip}. {[}\protect\hyperlink{ref-6chnW6cc}{152}{]}.
+The package implements the logic for rendering complex Wikidata-based academic dashboards and is available in GitHub at \url{https://github.com/lubianat/wbib}.
+It allows the user to build dashboards based on Wikidata records of information such as gender of authors, the region of author's institutions, topics of articles and similar metascientific information.
+The dashboard is composed of SPARQL queries written for the Wikidata Query Service {[}\protect\hyperlink{ref-2wDsXBwd}{87}{]}
+It also allows users to feed an arbitrary list of articles and obtain a custom dashboard.
+Wikidata Bib obtains the HTML dashboards after feeding wbib the lists of articles read in total (\texttt{index.html}) or in pre-determined time spans (\texttt{last\_day.html}, \texttt{past\_week.html} and \texttt{past\_month.html} )
+
+\begin{figure}
+\hypertarget{fig:dashboard}{%
+\centering
+\includegraphics[width=0.85\textwidth,height=\textheight]{images/wikidata_bib_display.png}
+\caption{Wikidata Bib queries for institutions of authors and most-read venues}\label{fig:dashboard}
+}
+\end{figure}
+
+The dashboard includes not only a basic list of read articles, but also statistics on most read authors and most-read venues.
+It also displays an interactive map of the institutions of articles read, permitting a glance at geographic biases in activities.
+An example of queries is shown in \ref{fig:dashboard}.
+As the queries are rendered live, they evolve in quality with the growth of Wikidata.
+Finally, the clean 5-star-open data format enables users to adapt the queries to include different aspects of Wikidata.
+For example, table \ref{tbl:articles_read_hca} showcases 10 articles that (1) I have read in the past year and (2) were authored by a speaker of the 1st Human Cell Atlas Latin America Single Cell RNA-seqData Analysis Workshop {[}\protect\hyperlink{ref-1hag8XE6}{153}{]}.
+One practical application that the dashboard enables, thus, is to identify people in an event, institution or location that the user has read before, therefore catalyzing the possibility of collaborations.
+Anecdotally, this strategy was tested successfully at Biohackathon Europe 2021 {[}\protect\hyperlink{ref-kHL3NVxk}{154}{]}, where I used the system both to identify possible collaborators and as a conversation starter.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.5673}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.4327}}@{}}
+\caption{Articles read by Tiago Lubiana before 8 December 2021 in which an author was a speaker at HCA Latin America
+\textbar{}\label{tbl:articles_read_hca}}\tabularnewline
+\toprule
+\begin{minipage}[b]{\linewidth}\raggedright
+workLabel
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+authors
+\end{minipage} \\
+\midrule
+\endfirsthead
+\toprule
+\begin{minipage}[b]{\linewidth}\raggedright
+workLabel
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+authors
+\end{minipage} \\
+\midrule
+\endhead
+A promoter-level mammalian expression atlas & Jay W Shin \\
+Single-cell RNA-seq reveals new types of human blood dendritic cells, monocytes, and progenitors. & Muzlifah Haniffa \\
+The Human Cell Atlas. & Musa Mhlanga, Jay W Shin, Muzlifah Haniffa, Menna R Clatworthy, Dana Pe'er \\
+The Human Cell Atlas: Technical approaches and challenges. & Jay W Shin \\
+Innate Immune Landscape in Early Lung Adenocarcinoma by Paired Single-Cell Analyses. & Dana Pe'er \\
+Single cell RNA sequencing of human liver reveals distinct intrahepatic macrophage populations & Sonya A MacParland \\
+Single-cell reconstruction of the early maternal-fetal interface in humans & Muzlifah Haniffa \\
+Distinct microbial and immune niches of the human colon & Rasa Elmentaite, Menna R Clatworthy \\
+A cell atlas of human thymic development defines T cell repertoire formation & Muzlifah Haniffa, Menna R Clatworthy \\
+Decoding human fetal liver haematopoiesis & Muzlifah Haniffa \\
+\bottomrule
+\end{longtable}
+
+\hypertarget{wikidata-bib-for-curation-of-cells-to-wikidata}{%
+\subsection{Wikidata Bib for curation of cells to Wikidata}\label{wikidata-bib-for-curation-of-cells-to-wikidata}}
+
+The Wikidata Bib system was devised originally to allow an overview of the fields of cell classification and biocuration.
+However, during the process, it was also repurposed for biocuration of new cell classes in Wikidata.
+By fast-tracking the reading of new articles, Wikidata Bib enables an efficient parsing of the literature and, thus, the identification of previously uncatalogued cell types.
+
+Articles read with Wikidata Bib were screened to mention cell types absent from Wikidata.
+As discussed in the chapter about the concept of cell type, we considered a ``cell type'' as any class of cells described by a domain expert with evidence of the reality of its instances.
+When a mention of such a class appears in an article, I first verify Wikidata for the existence of a related class.
+If it is absent from the platform, I enter a class name, alongside a superclass, and a QID in a Google Spreadsheet, as shown in Figure \ref{fig:biocuration_of_cells}.
+
+The information from the spreadsheet is pulled by a python script and processed locally with a series of dictionaries that match common terms to Wikidata IDs.
+In the example shown in Figure \ref{fig:biocuration_of_cells}, the string ``endothelial cell'' was matched against a manually curated dictionary to the Wikidata entry \href{https://www.wikidata.org/wiki/Q11394395}{Q11394395}, the representation of that concept on Wikidata.
+After reconciling the data, the script uses the Wikidata Integrator python package {[}\protect\hyperlink{ref-qDI8I4IJ}{95}{]} to insert the new entries on the Wikidata database.
+The code for integrating a Google Spreadsheet to Wikidata is available at \url{https://github.com/lubianat/wikidata_cell_curation}.
+
+\begin{figure}
+\hypertarget{fig:biocuration_of_cells}{%
+\centering
+\includegraphics[width=0.85\textwidth,height=\textheight]{images/biocuration_of_cells.png}
+\caption{Wikidata Bib was coupled with a biocuration framework for cell types}\label{fig:biocuration_of_cells}
+}
+\end{figure}
+
+Wikidata contains 2940 subclasses of ``cell (\href{https://www.wikidata.org/wiki/Q7868}{Q7868})'' as of 8 December 2021.
+From those, 550 cell classes are specific for humans, and 318 are specific for mice.\\
+As a comparison, as of 8 December 2021, Wikidata has more cell classes than the Cell Ontology, which lists 2577 classes.
+It is worth noticing that classes on the Cell Ontology are added after careful consideration by ontologists and domain experts and should be considered of higher quality than the ones on Wikidata.
+
+From the 2940 cell classes on Wikidata, 2812 (95.6\%) have been edited somehow by User:TiagoLubiana, and 1668 (56.7\%) have been created by User:TiagoLubiana.
+Edits made to the cells were often connecting a dangling term, created automatically from an Wikipedia page to the cell subclass hierarchy, and included adding identifiers, images, markers, and other pieces of information.
+From the 1668 entities created, approximately 63 species-neutral cell types, 188 human and 188 mouse cell types were added based on PanglaoDB entries (total of 439).
+The remaining 1229 entries were created either via Wikidata's web interface or via the curation workflow described in this chapter.
+These statistics are a simple demonstration of how the curation system efficiently contributes to the status of cell type information on Wikidata.
+
+As mentioned by Aviv Regev in the Human Cell Atlas General Meeting 2021, after a shoutou to ontologies: ``It's everyone's collective
+responsibility to participate in the annotation efforts, because that relies on domain expertise. To really tease apart things and give
+them names. Until we have names, people will have really a hard time working with things in biology.''{[}\protect\hyperlink{ref-url}{\textbf{url?}}{]}''
+We hope that by developing simplified curation tools we will engage more domain experts into the curation efforts.
+
+\hypertarget{wikidata-and-the-cell-ontology-interplay}{%
+\subsection{Wikidata and the Cell Ontology interplay}\label{wikidata-and-the-cell-ontology-interplay}}
+
+The contributions to cell types on Wikidata will be of most value if they are integrated to the current state-of-art of knowledge representation.
+Arguably, the Cell Ontology is the main source of cell type identifiers in the context of the Human Cell Atlas project.{[}\protect\hyperlink{ref-qT8WxqjA}{42}{]}
+Thus, data about cell types on Wikidata must be connected to the Cell Ontology.
+
+To start the improvement in the interplay of both databases, we proposed and got the approval of a specific Wikidata identifier for the Cell Ontology, the ``Cell Ontology ID'' (\url{https://www.wikidata.org/wiki/Property:P7963}).
+IDs can be added to Wikidata entities and connected them to external databases enabling integrative SPARQL queries.
+Besides using the common Wikidata interface, one can crowd-curate identifiers via a 3rd-party service, Mix'N'Match, which provides a user-friendly framework for connecting identifier catalogues to Wikidata. {[}\protect\hyperlink{ref-JgiKEEdq}{155}/?p=114{]}, as seen in Figure \ref{fig:mixn_match_cl}.
+Logically, we created a Mix'N'Match catalogue for harmonizing Cell Ontology IDs to Wikidata (\url{https://mix-n-match.toolforge.org/\#/catalog/4719}), harnessing the community support for the task.
+
+\begin{figure}
+\hypertarget{fig:mixnmatch_cl}{%
+\centering
+\includegraphics[width=0.85\textwidth,height=\textheight]{https://pointstodots.files.wordpress.com/2021/09/image-17.png}
+\caption{Mix'N'Match curation system}\label{fig:mixnmatch_cl}
+}
+\end{figure}
+
+As of early December 2021, more than 700 Cell Ontology IDs have been manually matched to Wikidata.
+The integration already enables queries that harness the previously existing information on Wikidata for Cell Ontology-based applications.
+For example, one can query Wikidata items that have (1) a crossref to a CL ID (2) a picture in Wikimedia Commons (\url{https://w.wiki/4F6e}, Figure \ref{fig:cl_images}).
+The different possibilities of mutual benefit between the Cell Ontology and Wikidata will continue to be explored in the following years of this PhD project.
+
+\begin{figure}
+\hypertarget{fig:cl_images}{%
+\centering
+\includegraphics[width=0.85\textwidth,height=\textheight]{https://user-images.githubusercontent.com/7917951/137942026-7645f368-d62a-4434-be05-083555cf0757.png}
+\caption{Entries on Wikidata with a depicting image and a Cell Ontology ID}\label{fig:cl_images}
+}
+\end{figure}
+
+\hypertarget{final-considerations-and-next-steps}{%
+\section{Final considerations and next steps}\label{final-considerations-and-next-steps}}
+
+To sum up, this PhD research project aims at improving knowledge representation in the context of the Human Cell Atlas.
+It is composed of a mixture of theoretical studies on conceptual modelling, practical contributions to knowledge organization projects (mainly the Cell Ontology and Wikidata), explorations of the data to generate biomedical insights, and a technical framework for organized reading.
+By approaching the object of study from a new perspective, we hope to make sizeable contributions and promote discussion and fruitful conflation of approaches.
+
+The next years of study will be devoted to improving the projects presented here into mature, useful objects.
+We hope to improve the interplay of Wikidata and Cell Ontology, developing frameworks to combine community- and expert-based curation of knowledge on cell types.
+Furthermore, we plan to integrate Wikidata to current single-cell RNA-sequencing pipelines by adapting R packages to use Wikidata (e.g.~the ontology-based packages OnClass {[}\protect\hyperlink{ref-sW6aNZJB}{56}{]} and ontoProc{[}\protect\hyperlink{ref-15YmDXALp}{57}{]}).
+Finally, we aim at moving the Wikidata Bib system to a well documented, user-friendly mature system, testing usability with other academics and distributing it as a durable open-source project.
+
+\hypertarget{additional-work}{%
+\section{Additional Work}\label{additional-work}}
+
+\hypertarget{collaborations-and-manuscripts}{%
+\subsection{Collaborations and manuscripts}\label{collaborations-and-manuscripts}}
+
+\hypertarget{fcoex}{%
+\subsubsection{fcoex}\label{fcoex}}
+
+During the initial course of this PhD work, we also completed the development and reporting of \emph{fcoex}, an R package for investigating cellular phenotypes using co-expression networks. {[}\protect\hyperlink{ref-MxIeSJYt}{156}{]} The software was maintained to withstand new releases of dependencies and new R version and was published as a preprint on biorxiv. {[}\protect\hyperlink{ref-doi:10.1101ux2f2021.12.07.471603v1}{\textbf{doi:10.1101/2021.12.07.471603v1?}}{]}
+
+\hypertarget{wikidata-bots}{%
+\subsubsection{Wikidata Bots}\label{wikidata-bots}}
+
+Alongside the editing of cell-type information on Wikidata, I have joined different efforts to improve biological information on Wikidata.
+I have collaborated with the ComplexPortal curators as part of the Virtual Elixir BioHackathon 2020 (https://github.com/virtual-biohackathons/covid-19-bh20/wiki) and for the following year, to build a Wikidata Bot to integrate information on protein complexes to Wikidata. An overview of the Wikidata integration is in Figure \ref{fig:complexportal}, presented in an article published in Nucleic Acid Research (re-use of the image and legend possible under the CC-BY license of the article). {[}\protect\hyperlink{ref-CQRJ53gu}{157}{]}
+
+\begin{figure}
+\hypertarget{fig:complexportal}{%
+\centering
+\includegraphics{https://oup.silverchair-cdn.com/oup/backfile/Content_public/Journal/nar/PAP/10.1093_nar_gkab991/2/gkab991fig3.jpeg?Expires=1641821957\&Signature=RK-es18S~Qh6vGQE~61i6u4prMuij8kVTbrjN6WUJLfYHOAhUhx9qQorBxROohjLLxbHvZ2YK9e7EwlI9HjVeNoGZ2PJs0Pv78Y31MdZLY8FeLYI2E4azwrqRyv9q0AH8QL3RorWZV1AhOb9bl-44Mr97Q~9MWzeTDnQQbxpCnGLG~YoG49kocD5KE~dmTSQdkXBU7kZnuGM1NPqMHo5ZDUoCRFwmTbLvd4kXoH~6CTyqx4ruQRIO-ks4Q0FUjYnxGX18gCFvoO2LMPZUPrQjTgD35RrVAkLs91Ur6BQHUuZ-ZsE3Iag3mBDu27vT9Jr93bOj0i9wz~surTtEGATgw__\&Key-Pair-Id=APKAIE5G5CRDK6RD3PGA}
+\caption{Complex Portal and Wikidata. (A) example of an entry assertion in Wikidata with provenance pointing to Complex Portal (Q104836061). (B) The number of protein complexes in Wikidata per taxon (\url{https://w.wiki/3ggX}). (C) Subset of Wikidata connected to the SARS-CoV-2 polymerase complex (\url{https://w.wiki/3eta}).}\label{fig:complexportal}
+}
+\end{figure}
+
+I have also collaborated with the Cellosaurus database {[}\protect\hyperlink{ref-1DguATd9G}{158}{]} to revive the CellosaurusBot {[}\protect\hyperlink{ref-lMQxhx3q}{159}{]}, responsible for updating the metadata on more than 100,000 cell lines on Wikidata. The bot code, written in Python, was refactored entirely and runs semi-automatically after the Cellosaurus database was released. A write-up of the integration is in progress and is planned for release/submission in the first semester of 2022.
+
+\hypertarget{systematic-reviews-and-publishing-of-intermediary-tables}{%
+\subsubsection{Systematic Reviews and publishing of intermediary tables}\label{systematic-reviews-and-publishing-of-intermediary-tables}}
+
+Finally, in collaboration with Olavo Amaral and Kleber Neves, from the Brazilian Reproducibility Initiative {[}\protect\hyperlink{ref-F2mYjDJ0}{160}{]} I wrote a commentary on the value of publishing intermediate datasets as citable products. {[}\protect\hyperlink{ref-oXMFSv5v}{161}{]}
+The pieces discuss the value of small curations done both in systematic reviews and by experimentalists in the course of their research projects. Published curation tables can serve as a source for improving the ecosystem of open knowledge, not less by reconciliation to Wikidata (thereby bridging the commentary with this project)
+
+\hypertarget{wisecube---enterprise-biomedical-question-and-answering}{%
+\subsubsection{WiseCube - enterprise biomedical question and answering}\label{wisecube---enterprise-biomedical-question-and-answering}}
+
+During a part of this project, I have worked part-time as a consultant for the Wisecube company, based in Seattle, United States. {[}\protect\hyperlink{ref-gdYsBE7d}{162}{]}
+The job was approved by FAPESP and consisted mainly in writing SPARQL queries that probe Wikidata for answers to the questions posed by the BioASQ competition. {[}\protect\hyperlink{ref-rkXotO9x}{163}{]}
+It also entails on-demand curation of biomedical topics on Wikidata based on requests by pharmaceutical companies as well as the development of dashboards targeted at providing insights to customers.
+
+\hypertarget{awards-and-participation-in-events}{%
+\subsection{Awards and participation in events}\label{awards-and-participation-in-events}}
+
+During the initial course of this PhD project, I have participated in several events:
+
+\begin{itemize}
+\tightlist
+\item
+  (Feb-2021) Presented an open talk at the ``Semana da Bioinformática'' event about modelling of biological systems (1020 views as of December 2021) {[}\protect\hyperlink{ref-url}{\textbf{url?}}``https://www.youtube.com/watch?v=VDvCxskIGEI''{]}
+\item
+  (Jun-Aug 2021) Helped to organize the No-Budget-Science HackWeek virtual hackathon {[}\protect\hyperlink{ref-12LOzmXRs}{164}{]}
+\item
+  (Jul - 2021) Presented the work ``Wikidata for 5-star Linked Open Databases: A case study of PanglaoDB'' at the Bio-Ontologies section of the Annual International Conference on Intelligent Systems for Molecular Biology. {[}\protect\hyperlink{ref-SALI6Ywb}{165}{]}. The presentation was awarded the best
+\item
+  (Jul - 2021) Awarded the 2nd place in the International Society for Computational Biology (ISCB) Wikipedia Competition for the contributions to the Wikipedia page on Biocuration (\url{https://en.wikipedia.org/wiki/Biocuration}) {[}\protect\hyperlink{ref-IJG65hFm}{166}{]}
+\item
+  (Nov - 2021) Managed a project during BioHackathon Europe 2021, in Barcelona, Spain, on the representation of ELIXIR information on Wikidata. {[}\protect\hyperlink{ref-14Wi842eZ}{167}{]}
+\end{itemize}
+
+\hypertarget{course-work}{%
+\subsection{Course work}\label{course-work}}
+
+During the first year of the PhD program, I took four different classes, acquiring 36 academic credits.
+Figure \ref{fig:courses_taken} displays the disciplines taken, available only in Portuguese.
+
+\begin{figure}
+\hypertarget{fig:courses_taken}{%
+\centering
+\includegraphics{images/janus_courses_taken.png}
+\caption{Courses taken during this PhD project}\label{fig:courses_taken}
+}
+\end{figure}
+
+\hypertarget{references}{%
+\subsection{References}\label{references}}
+
+\hypertarget{refs}{}
+\begin{CSLReferences}{0}{0}
+\leavevmode\vadjust pre{\hypertarget{ref-1GmbExweg}{}}%
+\CSLLeftMargin{1. }
+\CSLRightInline{\textbf{The Human Cell Atlas.}
+\CSLBlock{Aviv Regev, Sarah Teichmann, Eric Lander, Amir Giladi, Christophe Benoist, Ewan Birney, Bernd Bodenmiller, Peter Campbell, Piero Carninci, Menna R Clatworthy, \ldots{} Human Cell Atlas Meeting Participants} \emph{eLife} (2017-12-05) \url{https://www.wikidata.org/wiki/Q46368626}
+\CSLBlock{DOI: \href{https://doi.org/10.7554/elife.27041}{10.7554/elife.27041}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-tjdjR2Xf}{}}%
+\CSLLeftMargin{2. }
+\CSLRightInline{\textbf{The Human Cell Atlas and equity: lessons learned}
+\CSLBlock{Partha P Majumder, Musa M Mhlanga, Alex K Shalek} \emph{Nature Medicine} (2020-10-01) \url{https://www.wikidata.org/wiki/Q100491106}
+\CSLBlock{DOI: \href{https://doi.org/10.1038/s41591-020-1100-4}{10.1038/s41591-020-1100-4}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-kkwRTArg}{}}%
+\CSLLeftMargin{3. }
+\CSLRightInline{\textbf{The Human Cell Atlas White Paper}
+\CSLBlock{Aviv Regev, Sarah Teichmann, Orit Rozenblatt-Rosen, Michael JT Stubbington, Kristin Ardlie, Amir Giladi, Paola Arlotta, Gary D Bader, Christophe Benoist, Moshe Biton, \ldots{} Human Cell Atlas Organizing Committee} (2018-10-11) \url{https://www.wikidata.org/wiki/Q104450645}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-1DSEIjFha}{}}%
+\CSLLeftMargin{4. }
+\CSLRightInline{\textbf{Everyone needs a data-management plan}
+\CSLBlock{Nature} (2018-03-15) \url{https://www.wikidata.org/wiki/Q56524391}
+\CSLBlock{DOI: \href{https://doi.org/10.1038/d41586-018-03065-z}{10.1038/d41586-018-03065-z}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-zDRzmIGu}{}}%
+\CSLLeftMargin{5. }
+\CSLRightInline{\textbf{About the Data Coordination Platform}
+\CSLBlock{HCA Data Portal} \url{https://data.humancellatlas.org/about/}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-kX6KnbUo}{}}%
+\CSLLeftMargin{6. }
+\CSLRightInline{\textbf{Mapping the Human Body at the Cellular Level}
+\CSLBlock{HCA Data Portal} \url{https://data.humancellatlas.org/}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-2A7P3sTH}{}}%
+\CSLLeftMargin{7. }
+\CSLRightInline{\textbf{Publications} \url{https://www.humancellatlas.org/publications/}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-tvnuubVW}{}}%
+\CSLLeftMargin{8. }
+\CSLRightInline{\textbf{Identifiers for the 21st century: How to design, provision, and reuse persistent identifiers to maximize utility and impact of life science data}
+\CSLBlock{Julie A McMurry, Nick Juty, Niklas Blomberg, Tony Burdett, Tom Conlin, Nathalie Conte, Melanie Courtot, John Deck, Michel Dumontier, Donal K Fellows, \ldots{} Helen Parkinson} \emph{PLOS Biology} (2017-06-29) \url{https://www.wikidata.org/wiki/Q33037209}
+\CSLBlock{DOI: \href{https://doi.org/10.1371/journal.pbio.2001414}{10.1371/journal.pbio.2001414}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-paKiKTRS}{}}%
+\CSLLeftMargin{9. }
+\CSLRightInline{\textbf{What Is Your Conceptual Definition of "Cell Type" in the Context of a Mature Organism?}
+\CSLBlock{Paul Blainey, Hans Clevers, Cole Trapnell, Ed Lein, Emma Lundberg, Alfonso Martinez Arias, Joshua R Sanes, Jay Shendure, James Eberwine, Junhyong Kim, \ldots{} Mathias Uhlén} \emph{Cell systems} (2017-03-01) \url{https://www.wikidata.org/wiki/Q87649649}
+\CSLBlock{DOI: \href{https://doi.org/10.1016/j.cels.2017.03.006}{10.1016/j.cels.2017.03.006}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-sWv3okaH}{}}%
+\CSLLeftMargin{10. }
+\CSLRightInline{\textbf{A periodic table of cell types}
+\CSLBlock{Bo Xia, Itai Yanai} \emph{Development} (2019-06-15) \url{https://doi.org/ggctwf}
+\CSLBlock{DOI: \href{https://doi.org/10.1242/dev.169854}{10.1242/dev.169854} · PMID: \href{https://www.ncbi.nlm.nih.gov/pubmed/31249003}{31249003} · PMCID: \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6602355}{PMC6602355}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-19yYJWEkz}{}}%
+\CSLLeftMargin{11. }
+\CSLRightInline{\textbf{Exciting times to study the identity and evolution of cell types}
+\CSLBlock{Maria Sachkova, Pawel Burkhardt} \emph{Development} (2019-09-15) \url{https://doi.org/ghdb9v}
+\CSLBlock{DOI: \href{https://doi.org/10.1242/dev.178996}{10.1242/dev.178996} · PMID: \href{https://www.ncbi.nlm.nih.gov/pubmed/31537583}{31537583}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-BlxFp1v3}{}}%
+\CSLLeftMargin{12. }
+\CSLRightInline{\textbf{The Human Cell Atlas: from vision to reality.}
+\CSLBlock{Orit Rozenblatt-Rosen, Michael JT Stubbington, Aviv Regev, Sarah Teichmann} \emph{Nature} (2017-10-01) \url{https://www.wikidata.org/wiki/Q47565008}
+\CSLBlock{DOI: \href{https://doi.org/10.1038/550451a}{10.1038/550451a}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-eOUB1Bmj}{}}%
+\CSLLeftMargin{13. }
+\CSLRightInline{\textbf{Human Cell Atlas and cell-type authentication for regenerative medicine}
+\CSLBlock{Yulia Panina, Peter Karagiannis, Andreas Kurtz, Glyn N Stacey, Wataru Fujibuchi} \emph{Experimental and Molecular Medicine} (2020-09-15) \url{https://www.wikidata.org/wiki/Q99418657}
+\CSLBlock{DOI: \href{https://doi.org/10.1038/s12276-020-0421-1}{10.1038/s12276-020-0421-1}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-TupzTvtA}{}}%
+\CSLLeftMargin{14. }
+\CSLRightInline{\textbf{A community-based transcriptomics classification and nomenclature of neocortical cell types}
+\CSLBlock{Rafael Yuste, Michael J Hawrylycz, Nadia Aalling, Argel Aguilar-Valles, Detlev Arendt, Rubén Armañanzas, Giorgio A Ascoli, Concha Bielza, Vahid Bokharaie, Tobias B Bergmann, \ldots{} Ed S Lein} \emph{Nature Neuroscience} (2020-08-24) \url{https://www.wikidata.org/wiki/Q98665291}
+\CSLBlock{DOI: \href{https://doi.org/10.1038/s41593-020-0685-8}{10.1038/s41593-020-0685-8}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-w0Woz7JE}{}}%
+\CSLLeftMargin{15. }
+\CSLRightInline{\textbf{The evolving concept of cell identity in the single cell era}
+\CSLBlock{Samantha A Morris} \emph{Development} (2019-06-27) \url{https://www.wikidata.org/wiki/Q93086971}
+\CSLBlock{DOI: \href{https://doi.org/10.1242/dev.169748}{10.1242/dev.169748}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-srfuRMe}{}}%
+\CSLLeftMargin{16. }
+\CSLRightInline{\textbf{Implications of Epigenetic Variability within a Cell Population for "Cell Type" Classification}
+\CSLBlock{Inna Tabansky, Joel Stern, Donald W Pfaff} \emph{Frontiers in Behavioral Neuroscience} (2015-12-16) \url{https://www.wikidata.org/wiki/Q26770736}
+\CSLBlock{DOI: \href{https://doi.org/10.3389/fnbeh.2015.00342}{10.3389/fnbeh.2015.00342}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-1GXQByEaQ}{}}%
+\CSLLeftMargin{17. }
+\CSLRightInline{\textbf{Geometry of the Gene Expression Space of Individual Cells}
+\CSLBlock{Yael Korem, Pablo Szekely, Yuval Hart, Hila Sheftel, Jean Hausser, Avi Mayo, Michael E Rothenberg, Tomer Kalisky, Uri Alon} \emph{PLOS Computational Biology} (2015-07-10) \url{https://www.wikidata.org/wiki/Q35688096}
+\CSLBlock{DOI: \href{https://doi.org/10.1371/journal.pcbi.1004224}{10.1371/journal.pcbi.1004224}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-k0Pe9YOB}{}}%
+\CSLLeftMargin{18. }
+\CSLRightInline{\textbf{Evolution of Cellular Differentiation: From Hypotheses to Models}
+\CSLBlock{Pedro Márquez-Zacarías, Rozenn M Pineau, Marcella Gomez, Alan Veliz-Cuba, David Murrugarra, William C Ratcliff, Karl J Niklas} \emph{Trends in Ecology \& Evolution} (2020-08-20) \url{https://www.wikidata.org/wiki/Q98633613}
+\CSLBlock{DOI: \href{https://doi.org/10.1016/j.tree.2020.07.013}{10.1016/j.tree.2020.07.013}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-pNGap1Du}{}}%
+\CSLLeftMargin{19. }
+\CSLRightInline{\textbf{An era of single-cell genomics consortia}
+\CSLBlock{Yoshinari Ando, Andrew T Kwon, Jay W Shin} \emph{Experimental and Molecular Medicine} (2020-09-15) \url{https://www.wikidata.org/wiki/Q99418649}
+\CSLBlock{DOI: \href{https://doi.org/10.1038/s12276-020-0409-x}{10.1038/s12276-020-0409-x}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-MoaYZAA0}{}}%
+\CSLLeftMargin{20. }
+\CSLRightInline{\textbf{Inferring cell type innovations by phylogenetic methods-concepts, methods, and limitations}
+\CSLBlock{Koryu Kin, Koryu Kin} \emph{Journal of Experimental Zoology. Part B: Molecular and Developmental Evolution} (2015-10-14) \url{https://www.wikidata.org/wiki/Q40436539}
+\CSLBlock{DOI: \href{https://doi.org/10.1002/jez.b.22657}{10.1002/jez.b.22657}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-WAeCfntu}{}}%
+\CSLLeftMargin{21. }
+\CSLRightInline{\textbf{Towards a pragmatic definition of cell type}
+\CSLBlock{Tiago Lubiana, Helder Nakaya} (2021-01-04) \url{https://www.wikidata.org/wiki/Q108723646}
+\CSLBlock{DOI: \href{https://doi.org/10.22541/au.160979530.02627436/v1}{10.22541/au.160979530.02627436/v1}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-V85zvNGa}{}}%
+\CSLLeftMargin{22. }
+\CSLRightInline{\textbf{How Many Types of Cells Are in the Human Body?}
+\CSLBlock{ibswit} (2017-05-17) \url{https://askabiologist.asu.edu/questions/human-cell-types}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-SKmDXJlO}{}}%
+\CSLLeftMargin{23. }
+\CSLRightInline{\textbf{How many cell types in a human body? How about the number of cell cycles in each species?}
+\CSLBlock{ResearchGate} \url{https://www.researchgate.net/post/How-many-cell-types-in-a-human-body-How-about-the-number-of-cell-cycles-in-each-species}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-WBDY0Uoy}{}}%
+\CSLLeftMargin{24. }
+\CSLRightInline{\textbf{Types of cells in the human body}
+\CSLBlock{Kenhub} \url{https://www.kenhub.com/en/library/anatomy/types-of-cells-in-the-human-body}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-SprCx2w6}{}}%
+\CSLLeftMargin{25. }
+\CSLRightInline{\textbf{BioNumbers-\/-the database of key numbers in molecular and cell biology}
+\CSLBlock{Ron Milo, Paul Jorgensen, Uri Moran, Griffin M Weber, Michael Springer} \emph{Nucleic Acids Research} (2010-01-01) \url{https://www.wikidata.org/wiki/Q24643881}
+\CSLBlock{DOI: \href{https://doi.org/10.1093/nar/gkp889}{10.1093/nar/gkp889}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-jePJgR0H}{}}%
+\CSLLeftMargin{26. }
+\CSLRightInline{\textbf{Search BioNumbers - The Database of Useful Biological Numbers} \url{https://bionumbers.hms.harvard.edu/search.aspx}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-J5X2Xu6M}{}}%
+\CSLLeftMargin{27. }
+\CSLRightInline{\textbf{Cell types and ontologies of the Human Cell Atlas}
+\CSLBlock{David Osumi-Sutherland, Chuan Xu, Maria C Keays, Peter V Kharchenko, Aviv Regev, Ed S Lein, Sarah Teichmann} (2021-06-28) \url{https://www.wikidata.org/wiki/Q107373831}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-15efKvxi0}{}}%
+\CSLLeftMargin{28. }
+\CSLRightInline{\textbf{The continued need for animals to advance brain research}
+\CSLBlock{Judith R Homberg, Roger AH Adan, Natalia Alenina, Antonis Asiminas, Michael Bader, Tom Beckers, Denovan P Begg, Arjan Blokland, Marilise E Burger, Gertjan van Dijk, \ldots{} Lisa Genzel} \emph{Neuron} (2021-08-01) \url{https://www.wikidata.org/wiki/Q110088775}
+\CSLBlock{DOI: \href{https://doi.org/10.1016/j.neuron.2021.07.015}{10.1016/j.neuron.2021.07.015}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-wvN4dtjQ}{}}%
+\CSLLeftMargin{29. }
+\CSLRightInline{\textbf{Neuronal diversity: too many cell types for comfort?}
+\CSLBlock{Stevens CF} \emph{Current Biology} (1998-10-01) \url{https://www.wikidata.org/wiki/Q48373178}
+\CSLBlock{DOI: \href{https://doi.org/10.1016/s0960-9822(98)70454-3}{10.1016/s0960-9822(98)70454-3}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-xWhvkd3B}{}}%
+\CSLLeftMargin{30. }
+\CSLRightInline{\textbf{An estimation of the number of cells in the human body}
+\CSLBlock{Eva Bianconi, Allison Piovesan, Federica Facchin, Alina Beraudi, Raffaella Casadei, Flavia Frabetti, Lorenza Vitale, Maria Chiara Pelleri, Simone Tassani, Francesco Piva, \ldots{} Silvia Canaider} \emph{Annals of Human Biology} (2013-07-05) \url{https://www.wikidata.org/wiki/Q34037445}
+\CSLBlock{DOI: \href{https://doi.org/10.3109/03014460.2013.807878}{10.3109/03014460.2013.807878}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-HFiosSKK}{}}%
+\CSLLeftMargin{31. }
+\CSLRightInline{\textbf{A curated database reveals trends in single-cell transcriptomics}
+\CSLBlock{Valentine Svensson, Eduardo da Veiga Beltrame, Lior Pachter} \emph{Database} (2020-11-01) \url{https://www.wikidata.org/wiki/Q103034964}
+\CSLBlock{DOI: \href{https://doi.org/10.1093/database/baaa073}{10.1093/database/baaa073}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-O95WN4x0}{}}%
+\CSLLeftMargin{32. }
+\CSLRightInline{\textbf{The evolution of cell types in animals: emerging principles from molecular studies.}
+\CSLBlock{Detlev Arendt} \emph{Nature reviews. Genetics} (2008-11) \url{https://www.ncbi.nlm.nih.gov/pubmed/18927580}
+\CSLBlock{DOI: \href{https://doi.org/10.1038/nrg2416}{10.1038/nrg2416} · PMID: \href{https://www.ncbi.nlm.nih.gov/pubmed/18927580}{18927580}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-ogAGO9KH}{}}%
+\CSLLeftMargin{33. }
+\CSLRightInline{\textbf{The origin and evolution of cell types}
+\CSLBlock{Detlev Arendt, Jacob M Musser, Clare VH Baker, Aviv Bergman, Connie Cepko, Douglas H Erwin, Mihaela Pavlicev, Gerhard Schlosser, Stefanie Widder, Manfred D Laubichler, Günter P Wagner} \emph{Nature Reviews Genetics} (2016-11-07) \url{https://doi.org/f9b62x}
+\CSLBlock{DOI: \href{https://doi.org/10.1038/nrg.2016.127}{10.1038/nrg.2016.127} · PMID: \href{https://www.ncbi.nlm.nih.gov/pubmed/27818507}{27818507}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-14J9lsoMd}{}}%
+\CSLLeftMargin{34. }
+\CSLRightInline{\textbf{Stem cell states, fates, and the rules of attraction.}
+\CSLBlock{Tariq Enver, Martin Pera, Carsten Peterson, Peter W Andrews} \emph{Cell Stem Cell} (2009-05-01) \url{https://www.wikidata.org/wiki/Q37475461}
+\CSLBlock{DOI: \href{https://doi.org/10.1016/j.stem.2009.04.011}{10.1016/j.stem.2009.04.011}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-OjxQDZpx}{}}%
+\CSLLeftMargin{35. }
+\CSLRightInline{\textbf{Theory of cell fate}
+\CSLBlock{Michael J Casey, Patrick S Stumpf, Ben D MacArthur} \emph{Wiley interdisciplinary reviews. Systems biology and medicine} (2019-12-12) \url{https://www.wikidata.org/wiki/Q91908361}
+\CSLBlock{DOI: \href{https://doi.org/10.1002/wsbm.1471}{10.1002/wsbm.1471}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-19g5Iusf9}{}}%
+\CSLLeftMargin{36. }
+\CSLRightInline{\textbf{Perspectives on defining cell types in the brain}
+\CSLBlock{Eran A Mukamel, John Ngai} \emph{Current Opinion in Neurobiology} (2018-12-06) \url{https://www.wikidata.org/wiki/Q90361677}
+\CSLBlock{DOI: \href{https://doi.org/10.1016/j.conb.2018.11.007}{10.1016/j.conb.2018.11.007}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-4TJnL1xT}{}}%
+\CSLLeftMargin{37. }
+\CSLRightInline{\textbf{Ensembles, dynamics, and cell types: Revisiting the statistical mechanics perspective on cellular regulation}
+\CSLBlock{Stefan Bornholdt, Stuart Kauffman} \emph{Journal of Theoretical Biology} (2019-01-31) \url{https://www.wikidata.org/wiki/Q91316993}
+\CSLBlock{DOI: \href{https://doi.org/10.1016/j.jtbi.2019.01.036}{10.1016/j.jtbi.2019.01.036}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-g74dZjOM}{}}%
+\CSLLeftMargin{38. }
+\CSLRightInline{\textbf{Species Concepts and Species Delimitation}
+\CSLBlock{Kevin De Queiroz} \emph{Systematic Biology} (2007-12) \url{https://doi.org/c34kzf}
+\CSLBlock{DOI: \href{https://doi.org/10.1080/10635150701701083}{10.1080/10635150701701083} · PMID: \href{https://www.ncbi.nlm.nih.gov/pubmed/18027281}{18027281}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-1CI8uS6ka}{}}%
+\CSLLeftMargin{39. }
+\CSLRightInline{\textbf{An ontology for cell types}
+\CSLBlock{Jonathan Bard, Sue Rhee, Michael Ashburner} \emph{Genome Biology} (2005-01-01) \url{https://www.wikidata.org/wiki/Q21184168}
+\CSLBlock{DOI: \href{https://doi.org/10.1186/gb-2005-6-2-r21}{10.1186/gb-2005-6-2-r21}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-gAysgnsS}{}}%
+\CSLLeftMargin{40. }
+\CSLRightInline{\textbf{Logical Development of the Cell Ontology}
+\CSLBlock{Terrence F Meehan, Anna Maria Masci, Amina Abdulla, Lindsay G Cowell, Judith A Blake, Christopher J Mungall, Alexander D Diehl} \emph{BMC Bioinformatics} (2011-01-05) \url{https://doi.org/c7kw6x}
+\CSLBlock{DOI: \href{https://doi.org/10.1186/1471-2105-12-6}{10.1186/1471-2105-12-6} · PMID: \href{https://www.ncbi.nlm.nih.gov/pubmed/21208450}{21208450} · PMCID: \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3024222}{PMC3024222}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-17U3pGEjv}{}}%
+\CSLLeftMargin{41. }
+\CSLRightInline{\textbf{The Cell Ontology 2016: enhanced content, modularization, and ontology interoperability}
+\CSLBlock{Alexander D Diehl, Terrence F Meehan, Yvonne M Bradford, Matthew H Brush, Wasila M Dahdul, David S Dougall, Yongqun He, David Osumi-Sutherland, Alan Ruttenberg, Sirarat Sarntivijai, \ldots{} Christopher J Mungall} \emph{Journal of Biomedical Semantics} (2016-07-04) \url{https://doi.org/gg99b9}
+\CSLBlock{DOI: \href{https://doi.org/10.1186/s13326-016-0088-7}{10.1186/s13326-016-0088-7} · PMID: \href{https://www.ncbi.nlm.nih.gov/pubmed/27377652}{27377652} · PMCID: \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4932724}{PMC4932724}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-qT8WxqjA}{}}%
+\CSLLeftMargin{42. }
+\CSLRightInline{\textbf{Cell type ontologies of the Human Cell Atlas}
+\CSLBlock{David Osumi-Sutherland, Chuan Xu, Maria Keays, Adam P Levine, Peter V Kharchenko, Aviv Regev, Ed Lein, Sarah Teichmann} \emph{Nature Cell Biology} (2021-11-01) \url{https://www.wikidata.org/wiki/Q109755180}
+\CSLBlock{DOI: \href{https://doi.org/10.1038/s41556-021-00787-7}{10.1038/s41556-021-00787-7}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-jX2ZmXcc}{}}%
+\CSLLeftMargin{43. }
+\CSLRightInline{\textbf{Cells in experimental life sciences - challenges and solution to the rapid evolution of knowledge}
+\CSLBlock{Sirarat Sarntivijai, Alexander D Diehl, Yongqun He} \emph{BMC Bioinformatics} (2017-12-21) \url{https://doi.org/gg99b7}
+\CSLBlock{DOI: \href{https://doi.org/10.1186/s12859-017-1976-2}{10.1186/s12859-017-1976-2} · PMID: \href{https://www.ncbi.nlm.nih.gov/pubmed/29322916}{29322916} · PMCID: \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5763506}{PMC5763506}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-rK8KD0us}{}}%
+\CSLLeftMargin{44. }
+\CSLRightInline{\textbf{Cells in ExperimentaL Life Sciences (CELLS-2018): capturing the knowledge of normal and diseased cells with ontologies}
+\CSLBlock{Sirarat Sarntivijai, Yongqun He, Alexander D Diehl} \emph{BMC Bioinformatics} (2019-04-25) \url{https://doi.org/gg99b8}
+\CSLBlock{DOI: \href{https://doi.org/10.1186/s12859-019-2721-9}{10.1186/s12859-019-2721-9} · PMID: \href{https://www.ncbi.nlm.nih.gov/pubmed/31272374}{31272374} · PMCID: \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6509796}{PMC6509796}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-16phbXNJE}{}}%
+\CSLLeftMargin{45. }
+\CSLRightInline{\textbf{Scaled, high fidelity electrophysiological, morphological, and transcriptomic cell characterization}
+\CSLBlock{Brian R Lee, Agata Budzillo, Kristen Hadley, Jeremy A Miller, Tim Jarsky, Katherine Baker, DiJon Hill, Lisa Kim, Rusty Mann, Lindsay Ng, \ldots{} Jim Berg} \emph{eLife} (2021-08-13) \url{https://www.wikidata.org/wiki/Q109717199}
+\CSLBlock{DOI: \href{https://doi.org/10.7554/elife.65482}{10.7554/elife.65482}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-WKbly37M}{}}%
+\CSLLeftMargin{46. }
+\CSLRightInline{\textbf{Current best practices in single-cell RNA-seq analysis: a tutorial}
+\CSLBlock{Malte D Luecken, Fabian J Theis} \emph{Molecular Systems Biology} (2019-06-19) \url{https://www.wikidata.org/wiki/Q64974172}
+\CSLBlock{DOI: \href{https://doi.org/10.15252/msb.20188746}{10.15252/msb.20188746}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-ii1dVqoy}{}}%
+\CSLLeftMargin{47. }
+\CSLRightInline{\textbf{Tutorial: guidelines for annotating single-cell transcriptomic maps using automated and manual methods}
+\CSLBlock{Zoe A Clarke, Tallulah Andrews, Jawairia Atif, Delaram Pouyabahar, Brendan T Innes, Sonya A MacParland, Gary D Bader} \emph{Nature Protocols} (2021-05-24) \url{https://www.wikidata.org/wiki/Q107158224}
+\CSLBlock{DOI: \href{https://doi.org/10.1038/s41596-021-00534-0}{10.1038/s41596-021-00534-0}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-pEJYKNFc}{}}%
+\CSLLeftMargin{48. }
+\CSLRightInline{\textbf{Data-Driven Phenotypic Dissection of AML Reveals Progenitor-like Cells that Correlate with Prognosis}
+\CSLBlock{Jacob H Levine, Erin F Simonds, Sean C Bendall, Kara L Davis, El-ad D Amir, Michelle D Tadmor, Oren Litvin, Harris G Fienberg, Astraea Jager, Eli R Zunder, \ldots{} Garry P Nolan} \emph{Cell} (2015-06-18) \url{https://www.wikidata.org/wiki/Q30975629}
+\CSLBlock{DOI: \href{https://doi.org/10.1016/j.cell.2015.05.047}{10.1016/j.cell.2015.05.047}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-JpCsfe9G}{}}%
+\CSLLeftMargin{49. }
+\CSLRightInline{\textbf{Fast unfolding of communities in large networks}
+\CSLBlock{Vincent Blondel, Jean-Loup Guillaume, Renaud Lambiotte, Etienne Lefebvre} \emph{Journal of Statistical Mechanics: Theory and Experiment} (2008-10-09) \url{https://www.wikidata.org/wiki/Q29305711}
+\CSLBlock{DOI: \href{https://doi.org/10.1088/1742-5468/2008/10/p10008}{10.1088/1742-5468/2008/10/p10008}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-1GezH4XNn}{}}%
+\CSLLeftMargin{50. }
+\CSLRightInline{\textbf{PanglaoDB: a web server for exploration of mouse and human single-cell RNA sequencing data}
+\CSLBlock{Oscar Franzén, Li-Ming Gan, Johan LM Bjorkegren} \emph{Database} (2019-01-01) \url{https://www.wikidata.org/wiki/Q63664483}
+\CSLBlock{DOI: \href{https://doi.org/10.1093/database/baz046}{10.1093/database/baz046}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-chGii6yw}{}}%
+\CSLLeftMargin{51. }
+\CSLRightInline{\textbf{CellMarker: a manually curated resource of cell markers in human and mouse}
+\CSLBlock{Xinxin Zhang, Yujia Lan, Jinyuan Xu, Fei Quan, Erjie Zhao, Chunyu Deng, Tao Luo, Liwen Xu, Gaoming Liao, Min Yan, \ldots{} Yun Xiao} \emph{Nucleic Acids Research} (2019-01-01) \url{https://www.wikidata.org/wiki/Q56984510}
+\CSLBlock{DOI: \href{https://doi.org/10.1093/nar/gky900}{10.1093/nar/gky900}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-agnqfdk6}{}}%
+\CSLLeftMargin{52. }
+\CSLRightInline{\textbf{The Cell Ontology 2016: enhanced content, modularization, and ontology interoperability.}
+\CSLBlock{Alexander D Diehl, Terrence F Meehan, Yvonne M Bradford, Matthew H Brush, Wasila M Dahdul, David S Dougall, Yongqun He, David Osumi-Sutherland, Alan Ruttenberg, Sirarat Sarntivijai, \ldots{} Christopher J Mungall} \emph{Journal of Biomedical Semantics} (2016-07-04) \url{https://www.wikidata.org/wiki/Q36067763}
+\CSLBlock{DOI: \href{https://doi.org/10.1186/s13326-016-0088-7}{10.1186/s13326-016-0088-7}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-SozKx0lF}{}}%
+\CSLLeftMargin{53. }
+\CSLRightInline{\textbf{Cell type discovery using single-cell transcriptomics: implications for ontological representation}
+\CSLBlock{Brian D Aevermann, Mark Novotny, Trygve E Bakken, Jeremy A Miller, Alexander D Diehl, David Osumi-Sutherland, Roger S Lasken, Ed S Lein, Richard H Scheuermann} \emph{Human Molecular Genetics} (2018-05-01) \url{https://www.wikidata.org/wiki/Q52625486}
+\CSLBlock{DOI: \href{https://doi.org/10.1093/hmg/ddy100}{10.1093/hmg/ddy100}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-15xnotFsw}{}}%
+\CSLLeftMargin{54. }
+\CSLRightInline{\textbf{Cell ontology in an age of data-driven cell classification.}
+\CSLBlock{David Osumi-Sutherland, David Osumi-Sutherland} \emph{BMC Bioinformatics} (2017-12-21) \url{https://www.wikidata.org/wiki/Q49192555}
+\CSLBlock{DOI: \href{https://doi.org/10.1186/s12859-017-1980-6}{10.1186/s12859-017-1980-6}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-P1gDLuog}{}}%
+\CSLLeftMargin{55. }
+\CSLRightInline{\textbf{Besca, a single-cell transcriptomics analysis toolkit to accelerate translational research}
+\CSLBlock{Sophia Clara Mädler, Alice Julien-Laferriere, Luis Wyss, Miroslav Phan, Albert SW Kang, Eric Ulrich, Roland Schmucki, Jitao David Zhang, Martin Ebeling, Laura Badi, \ldots{} Klas Hatje} \emph{bioRxiv} (2020-08-12) \url{https://www.wikidata.org/wiki/Q104450593}
+\CSLBlock{DOI: \href{https://doi.org/10.1101/2020.08.11.245795}{10.1101/2020.08.11.245795}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-sW6aNZJB}{}}%
+\CSLLeftMargin{56. }
+\CSLRightInline{\textbf{Leveraging the Cell Ontology to classify unseen cell types}
+\CSLBlock{Sheng Wang, Angela Oliveira Pisco, Aaron McGeever, Maria Brbić, Marinka Žitnik, Spyros Darmanis, Jure Leskovec, Jim Karkanias, Russ Altman} \emph{Nature Communications} (2021-09-21) \url{https://www.wikidata.org/wiki/Q108929315}
+\CSLBlock{DOI: \href{https://doi.org/10.1038/s41467-021-25725-x}{10.1038/s41467-021-25725-x}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-15YmDXALp}{}}%
+\CSLLeftMargin{57. }
+\CSLRightInline{\textbf{ontoProc: processing of ontologies of anatomy, cell lines, and so on} \url{https://www.wikidata.org/wiki/Q101074371}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-tdlWsvTd}{}}%
+\CSLLeftMargin{58. }
+\CSLRightInline{\textbf{Tabula Muris} \url{https://tabula-muris.ds.czbiohub.org/}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-FjUqVIOp}{}}%
+\CSLLeftMargin{59. }
+\CSLRightInline{\textbf{Tabula Sapiens} \url{https://tabula-sapiens-portal.ds.czbiohub.org/celltypes}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-T7RxnUNw}{}}%
+\CSLLeftMargin{60. }
+\CSLRightInline{\textbf{Azimuth} \url{https://azimuth.hubmapconsortium.org/}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-1FghWzORJ}{}}%
+\CSLLeftMargin{61. }
+\CSLRightInline{\textbf{Construction and Usage of a Human Body Common Coordinate Framework Comprising Clinical, Semantic, and Spatial Ontologies}
+\CSLBlock{Katy Börner, Ellen Quardokus, Bruce WHerr II, Leonard E Cross, Elizabeth G Record, Yingnan Ju, Andreas D Bueckle, James P Sluka, Jonathan C Silverstein, Kristen M Browne, \ldots{} Griffin M Weber} (2020-07-28) \url{https://www.wikidata.org/wiki/Q109755184}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-yMavNVkS}{}}%
+\CSLLeftMargin{62. }
+\CSLRightInline{\textbf{Cell Annotation Platform \textbar{} Coming Soon} \url{http://celltype.info/}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-123DiCgc8}{}}%
+\CSLLeftMargin{63. }
+\CSLRightInline{\textbf{Cross-tissue immune cell analysis reveals tissue-specific adaptations and clonal architecture across the human body}
+\CSLBlock{Conde C Domínguez, Tomás Gomes, Lorna B Jarvis, C Xu, SK Howlett, DB Rainbow, Ondrej Suchanek, Hamish W King, Lira Mamanova, Krzysztof Polański, \ldots{} Sarah Teichmann} (2021-04-28) \url{https://www.wikidata.org/wiki/Q107363182}
+\CSLBlock{DOI: \href{https://doi.org/10.1101/2021.04.28.441762}{10.1101/2021.04.28.441762}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-UduMr7x2}{}}%
+\CSLLeftMargin{64. }
+\CSLRightInline{\textbf{Ontology based molecular signatures for immune cell types via gene expression analysis}
+\CSLBlock{Terrence F Meehan, Nicole Vasilevsky, Christopher J Mungall, David S Dougall, Melissa Haendel, Judith A Blake, Alexander D Diehl} \emph{BMC Bioinformatics} (2013-08-30) \url{https://www.wikidata.org/wiki/Q34978215}
+\CSLBlock{DOI: \href{https://doi.org/10.1186/1471-2105-14-263}{10.1186/1471-2105-14-263}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-ecteO8vI}{}}%
+\CSLLeftMargin{65. }
+\CSLRightInline{\textbf{Logical development of the cell ontology}
+\CSLBlock{Terrence F Meehan, Anna Maria Masci, Amina Abdulla, Lindsay G Cowell, Judith A Blake, Christopher J Mungall, Alexander D Diehl} \emph{BMC Bioinformatics} (2011-01-05) \url{https://www.wikidata.org/wiki/Q33786317}
+\CSLBlock{DOI: \href{https://doi.org/10.1186/1471-2105-12-6}{10.1186/1471-2105-12-6}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-DLTMbf54}{}}%
+\CSLLeftMargin{66. }
+\CSLRightInline{\textbf{Ontologies for the life sciences}
+\CSLBlock{Steffen Schulze-Kremer, Barry Smith} (2005-11-15) \url{https://www.wikidata.org/wiki/Q105870680}
+\CSLBlock{DOI: \href{https://doi.org/10.1002/047001153x.g408213}{10.1002/047001153x.g408213}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-cZEmYsqx}{}}%
+\CSLLeftMargin{67. }
+\CSLRightInline{\textbf{The Philosophy of Logical Atomism, Lecture 1: Facts and Propositions} \url{https://www.wikidata.org/wiki/Q105105637}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-to2onCDy}{}}%
+\CSLLeftMargin{68. }
+\CSLRightInline{\textbf{Logik der Forschung}
+\CSLBlock{Karl Popper} (1934-01-01) \url{https://www.wikidata.org/wiki/Q1868040}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-RghcuiSS}{}}%
+\CSLLeftMargin{69. }
+\CSLRightInline{\textbf{The semantic conception of truth: and the foundations of semantics}
+\CSLBlock{Alfred Tarski} \emph{Philosophy and Phenomenological Research} (1944-03-01) \url{https://www.wikidata.org/wiki/Q106090790}
+\CSLBlock{DOI: \href{https://doi.org/10.2307/2102968}{10.2307/2102968}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-35incsRu}{}}%
+\CSLLeftMargin{70. }
+\CSLRightInline{\textbf{Applied Ontology - An Introduction} \url{https://www.wikidata.org/wiki/Q110015932}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-18wkLcGxT}{}}%
+\CSLLeftMargin{71. }
+\CSLRightInline{\textbf{The Gene Ontology resource: enriching a GOld mine}
+\CSLBlock{Gene Ontology Consortium} \emph{Nucleic Acids Research} (2020-12-08) \url{https://www.wikidata.org/wiki/Q104130127}
+\CSLBlock{DOI: \href{https://doi.org/10.1093/nar/gkaa1113}{10.1093/nar/gkaa1113}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-2KmDs8gy}{}}%
+\CSLLeftMargin{72. }
+\CSLRightInline{\textbf{Gene ontology: tool for the unification of biology. The Gene Ontology Consortium}
+\CSLBlock{M Ashburner, CA Ball, Judith A Blake, David Botstein, H Butler, JMichael Cherry, AP Davis, K Dolinski, Selina S Dwight, JT Eppig, \ldots{} Gavin Sherlock} \emph{Nature Genetics} (2000-05-01) \url{https://www.wikidata.org/wiki/Q23781406}
+\CSLBlock{DOI: \href{https://doi.org/10.1038/75556}{10.1038/75556}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-j3tJyG7J}{}}%
+\CSLLeftMargin{73. }
+\CSLRightInline{\textbf{The OBO Foundry: coordinated evolution of ontologies to support biomedical data integration}
+\CSLBlock{Barry Smith, Michael Ashburner, Cornelius Rosse, Jonathan Bard, William Bug, Werner Ceusters, Louis J Goldberg, Karen Eilbeck, Amelia Ireland, Christopher J Mungall, \ldots{} Suzanna Lewis} \emph{Nature Biotechnology} (2007-11-01) \url{https://www.wikidata.org/wiki/Q19671692}
+\CSLBlock{DOI: \href{https://doi.org/10.1038/nbt1346}{10.1038/nbt1346}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-djVboz3w}{}}%
+\CSLLeftMargin{74. }
+\CSLRightInline{\textbf{RDF 1.1 Concepts and Abstract Syntax} \url{https://www.w3.org/TR/rdf11-concepts/}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-16mCkZC1r}{}}%
+\CSLLeftMargin{75. }
+\CSLRightInline{\textbf{Introducing the Knowledge Graph: things, not strings}
+\CSLBlock{Google} (2012-05-16) \url{https://blog.google/products/search/introducing-knowledge-graph-things-not/}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-qMozvNth}{}}%
+\CSLLeftMargin{76. }
+\CSLRightInline{\textbf{Toward an epistemology of Wikipedia}
+\CSLBlock{Don Fallis} \emph{Journal of the Association for Information Science and Technology} (2008-08-01) \url{https://www.wikidata.org/wiki/Q101955295}
+\CSLBlock{DOI: \href{https://doi.org/10.1002/asi.20870}{10.1002/asi.20870}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-SGzjBOG0}{}}%
+\CSLLeftMargin{77. }
+\CSLRightInline{\textbf{Wikidata:Statistics - Wikidata} \url{https://www.wikidata.org/wiki/Wikidata:Statistics}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-xLpRePoh}{}}%
+\CSLLeftMargin{78. }
+\CSLRightInline{\textbf{From Freebase to Wikidata: The Great Migration}
+\CSLBlock{Thomas Pellissier Tanon, Denny Vrandečić, Sebastian Schaffert, Thomas Steiner, Lydia Pintscher} \emph{Proceedings of the 25th International Conference on World Wide Web} (2016-01-01) \url{https://www.wikidata.org/wiki/Q24074986}
+\CSLBlock{DOI: \href{https://doi.org/10.1145/2872427.2874809}{10.1145/2872427.2874809}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-Ea6hVYrD}{}}%
+\CSLLeftMargin{79. }
+\CSLRightInline{\textbf{Wikibase/DataModel - MediaWiki} \url{https://www.mediawiki.org/wiki/Wikibase/DataModel}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-17Yt10yrY}{}}%
+\CSLLeftMargin{80. }
+\CSLRightInline{\textbf{Help:Data type - Wikidata} \url{https://www.wikidata.org/wiki/Help:Data_type}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-S1Lksw7i}{}}%
+\CSLLeftMargin{81. }
+\CSLRightInline{\textbf{Help:Multilingual - Wikidata} \url{https://www.wikidata.org/wiki/Help:Multilingual}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-ZhP1mKyl}{}}%
+\CSLLeftMargin{82. }
+\CSLRightInline{\textbf{RDF 1.1 Semantics} \url{https://www.w3.org/TR/rdf11-mt/}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-4wSLyAPr}{}}%
+\CSLLeftMargin{83. }
+\CSLRightInline{\textbf{Wikidata:Data access - Wikidata} \url{https://www.wikidata.org/wiki/Wikidata:Data_access}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-1HghnypzG}{}}%
+\CSLLeftMargin{84. }
+\CSLRightInline{\textbf{WikidataR package - RDocumentation} \url{https://www.rdocumentation.org/packages/WikidataR/versions/2.2.0}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-VKWfrtR1}{}}%
+\CSLLeftMargin{85. }
+\CSLRightInline{\textbf{wikidata2df: Utility package for easily turning a SPARQL query into a dataframe}
+\CSLBlock{João Vitor F Cavalcante} \url{https://github.com/jvfe/wikidata2df}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-tQIJPG4k}{}}%
+\CSLLeftMargin{86. }
+\CSLRightInline{\textbf{Wikidata:Licensing - Wikidata} \url{https://www.wikidata.org/wiki/Wikidata:Licensing}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-2wDsXBwd}{}}%
+\CSLLeftMargin{87. }
+\CSLRightInline{\url{https://query.wikidata.org/}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-t66jYhqe}{}}%
+\CSLLeftMargin{88. }
+\CSLRightInline{\href{https://Q56010228}{Q56010228}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-17P4zruFZ}{}}%
+\CSLLeftMargin{89. }
+\CSLRightInline{\textbf{Scholia}
+\CSLBlock{Scholia} \url{https://scholia.toolforge.org/}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-guMp3q1V}{}}%
+\CSLLeftMargin{90. }
+\CSLRightInline{\textbf{SARS-CoV-2-Queries}
+\CSLBlock{SARS-CoV-2-Queries} \url{https://egonw.github.io/SARS-CoV-2-Queries/}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-17rRjL1Xj}{}}%
+\CSLLeftMargin{91. }
+\CSLRightInline{\textbf{Wikidata:Tools/OpenRefine - Wikidata} \url{https://www.wikidata.org/wiki/Wikidata:Tools/OpenRefine}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-K6ggpwRg}{}}%
+\CSLLeftMargin{92. }
+\CSLRightInline{\textbf{Help:QuickStatements - Wikidata} \url{https://www.wikidata.org/wiki/Help:QuickStatements}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-sSH04fxa}{}}%
+\CSLLeftMargin{93. }
+\CSLRightInline{\textbf{Wikidata:Bots - Wikidata} \url{https://www.wikidata.org/wiki/Wikidata:Bots}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-5K5MfnVl}{}}%
+\CSLLeftMargin{94. }
+\CSLRightInline{\textbf{Wikidata:Pywikibot - Python 3 Tutorial - Wikidata} \url{https://www.wikidata.org/wiki/Wikidata:Pywikibot_-_Python_3_Tutorial}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-qDI8I4IJ}{}}%
+\CSLLeftMargin{95. }
+\CSLRightInline{\textbf{GitHub - SuLab/WikidataIntegrator: A Wikidata Python module integrating the MediaWiki API and the Wikidata SPARQL endpoint}
+\CSLBlock{GitHub} \url{https://github.com/SuLab/WikidataIntegrator}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-3GqlN9Dk}{}}%
+\CSLLeftMargin{96. }
+\CSLRightInline{\textbf{Wikidata as a knowledge graph for the life sciences}
+\CSLBlock{Andra Waagmeester, Gregory Stupp, Sebastian Burgstaller-Muehlbacher, Benjamin M Good, Malachi Griffith, Obi Griffith, Kristina Hanspers, Henning Hermjakob, Toby Hudson, Kevin Hybiske, \ldots{} Andrew I Su} \emph{eLife} (2020-03-17) \url{https://www.wikidata.org/wiki/Q87830400}
+\CSLBlock{DOI: \href{https://doi.org/10.7554/elife.52614}{10.7554/elife.52614}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-Ym2HoRLl}{}}%
+\CSLLeftMargin{97. }
+\CSLRightInline{\textbf{Wikidata: A large-scale collaborative ontological medical database}
+\CSLBlock{Houcemeddine Turki, Thomas Shafee, Mohamed Ali Hadj Taieb, Mohamed Ben Aouicha, Denny Vrandečić, Diptanshu Das, Helmi Hamdi} \emph{Journal of Biomedical Informatics} (2019-09-23) \url{https://www.wikidata.org/wiki/Q68471881}
+\CSLBlock{DOI: \href{https://doi.org/10.1016/j.jbi.2019.103292}{10.1016/j.jbi.2019.103292}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-179mXrGIk}{}}%
+\CSLLeftMargin{98. }
+\CSLRightInline{\textbf{Big data: Wikiomics}
+\CSLBlock{Mitch Waldrop} \emph{Nature} (2008-09-04) \url{https://www.wikidata.org/wiki/Q28292893}
+\CSLBlock{DOI: \href{https://doi.org/10.1038/455022a}{10.1038/455022a}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-TItj7EYf}{}}%
+\CSLLeftMargin{99. }
+\CSLRightInline{\textbf{Calling on a million minds for community annotation in WikiProteins}
+\CSLBlock{Barend Mons, Michael Ashburner, Christine Chichester, Erik M van Mulligen, Marc Weeber, Johan den Dunnen, Gert-Jan van Ommen, Mark A Musen, Matt Cockerill, Henning Hermjakob, \ldots{} Amos Bairoch} \emph{Genome Biology} (2008-01-01) \url{https://www.wikidata.org/wiki/Q21183907}
+\CSLBlock{DOI: \href{https://doi.org/10.1186/gb-2008-9-5-r89}{10.1186/gb-2008-9-5-r89}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-P2QdZvGc}{}}%
+\CSLLeftMargin{100. }
+\CSLRightInline{\textbf{Ten Simple Rules for Developing Public Biological Databases}
+\CSLBlock{Mohamed Helmy, Alexander Crits-Christoph, Gary D Bader} \emph{PLOS Computational Biology} (2016-11-01) \url{https://www.wikidata.org/wiki/Q28595967}
+\CSLBlock{DOI: \href{https://doi.org/10.1371/journal.pcbi.1005128}{10.1371/journal.pcbi.1005128}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-bO7BekzO}{}}%
+\CSLLeftMargin{101. }
+\CSLRightInline{\textbf{Inside the Alexa-Friendly World of Wikidata}
+\CSLBlock{Tom Simonite} \emph{Wired} \url{https://www.wired.com/story/inside-the-alexa-friendly-world-of-wikidata/}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-18UXATsxP}{}}%
+\CSLLeftMargin{102. }
+\CSLRightInline{\textbf{A gene wiki for community annotation of gene function}
+\CSLBlock{Jon W Huss, Camilo Orozco, James Goodale, Chunlei Wu, Serge Batalov, Tim J Vickers, Faramarz Valafar, Andrew I Su} \emph{PLOS Biology} (2008-07-08) \url{https://www.wikidata.org/wiki/Q21092744}
+\CSLBlock{DOI: \href{https://doi.org/10.1371/journal.pbio.0060175}{10.1371/journal.pbio.0060175}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-13LWXQF0E}{}}%
+\CSLLeftMargin{103. }
+\CSLRightInline{\textbf{Making your database available through Wikipedia: the pros and cons}
+\CSLBlock{Robert D Finn, Paul P Gardner, Alex Bateman} \emph{Nucleic Acids Research} (2012-01-01) \url{https://www.wikidata.org/wiki/Q28254676}
+\CSLBlock{DOI: \href{https://doi.org/10.1093/nar/gkr1195}{10.1093/nar/gkr1195}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-2ZhxC0dg}{}}%
+\CSLLeftMargin{104. }
+\CSLRightInline{\textbf{Wikidata as a semantic framework for the Gene Wiki initiative}
+\CSLBlock{Sebastian Burgstaller-Muehlbacher, Andra Waagmeester, Elvira Mitraka, Julia Turner, Timothy Elliott Putman, Justin Leong, Chinmay Naik, Paul Pavlidis, Lynn Schriml, Benjamin M Good, Andrew I Su} \emph{Database} (2016-01-01) \url{https://www.wikidata.org/wiki/Q23712646}
+\CSLBlock{DOI: \href{https://doi.org/10.1093/database/baw015}{10.1093/database/baw015}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-DaJdrXLk}{}}%
+\CSLLeftMargin{105. }
+\CSLRightInline{\textbf{WikiGenomes: an open web application for community consumption and curation of gene annotation data in Wikidata}
+\CSLBlock{Timothy Elliott Putman, Sebastien Lelong, Sebastian Burgstaller-Muehlbacher, Andra Waagmeester, Colin Diesh, Nathan Dunn, Monica Munoz-Torres, Gregory Stupp, Chunlei Wu, Andrew I Su, Benjamin M Good} \emph{Database} (2017-03-08) \url{https://www.wikidata.org/wiki/Q28529449}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-aQfGxPRH}{}}%
+\CSLLeftMargin{106. }
+\CSLRightInline{\textbf{ChlamBase: a curated model organism database for the Chlamydia research community}
+\CSLBlock{Timothy Elliott Putman, Kevin Hybiske, Derek Jow, Cyrus Afrasiabi, Sebastien Lelong, Marco Alvarado Cano, Chunlei Wu, Andrew I Su} \emph{Database} (2019-01-01) \url{https://www.wikidata.org/wiki/Q63286185}
+\CSLBlock{DOI: \href{https://doi.org/10.1093/database/baz041}{10.1093/database/baz041}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-1GijvCQtv}{}}%
+\CSLLeftMargin{107. }
+\CSLRightInline{\textbf{Submit a Topic Page to PLOS Computational Biology and Wikipedia}
+\CSLBlock{Daniel Mietchen, Shoshana Wodak, Szymon Wasik, Natalia Szostak, Christophe Dessimoz} \emph{PLOS Computational Biology} (2018-05-31) \url{https://www.wikidata.org/wiki/Q54655231}
+\CSLBlock{DOI: \href{https://doi.org/10.1371/journal.pcbi.1006137}{10.1371/journal.pcbi.1006137}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-hxzL9pmm}{}}%
+\CSLLeftMargin{108. }
+\CSLRightInline{\textbf{Scholia, Scientometrics and Wikidata}
+\CSLBlock{Finn Årup Nielsen, Daniel Mietchen, Egon Willighagen} \emph{The Semantic Web: ESWC 2017 Satellite Events} (2017-10-01) \url{https://www.wikidata.org/wiki/Q41799194}
+\CSLBlock{DOI: \href{https://doi.org/10.1007/978-3-319-70407-4_36}{10.1007/978-3-319-70407-4\_36}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-PdG2G4Bp}{}}%
+\CSLLeftMargin{109. }
+\CSLRightInline{\textbf{Robustifying Scholia: paving the way for knowledge discovery and research assessment through Wikidata}
+\CSLBlock{Lane Rasberry, Egon Willighagen, Finn Årup Nielsen, Daniel Mietchen} \emph{Research Ideas and Outcomes} (2019-05-02) \url{https://www.wikidata.org/wiki/Q63433973}
+\CSLBlock{DOI: \href{https://doi.org/10.3897/rio.5.e35820}{10.3897/rio.5.e35820}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-P1EnNa7Q}{}}%
+\CSLLeftMargin{110. }
+\CSLRightInline{\textbf{The LOTUS Initiative for Open Natural Products Research: Knowledge Management through Wikidata}
+\CSLBlock{Adriano Rutz, Maria Sorokina, Jakub Galgonek, Daniel Mietchen, Egon Willighagen, Arnaud Gaudry, James G Graham, Ralf Stephan, Roderic Page, Jiří Vondrášek, \ldots{} Pierre-Marie Allard} \emph{Cold Spring Harbor Laboratory} (2021-05-28) \url{https://doi.org/gh6dqk}
+\CSLBlock{DOI: \href{https://doi.org/10.1101/2021.02.28.433265}{10.1101/2021.02.28.433265}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-gqY9YdmH}{}}%
+\CSLLeftMargin{111. }
+\CSLRightInline{\textbf{GeneDB and Wikidata}
+\CSLBlock{Magnus Manske, Ulrike Böhme, Christoph Püthe, Matt Berriman} \emph{Wellcome Open Research} (2019-10-14) \url{https://doi.org/gnq75m}
+\CSLBlock{DOI: \href{https://doi.org/10.12688/wellcomeopenres.15355.2}{10.12688/wellcomeopenres.15355.2} · PMID: \href{https://www.ncbi.nlm.nih.gov/pubmed/31723674}{31723674} · PMCID: \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6823904}{PMC6823904}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-HUr1iigG}{}}%
+\CSLLeftMargin{112. }
+\CSLRightInline{\textbf{The Cellosaurus, a Cell-Line Knowledge Resource}
+\CSLBlock{Amos Bairoch} \emph{Journal of Biomolecular Techniques : JBT} (2018-07) \url{https://doi.org/gf75bq}
+\CSLBlock{DOI: \href{https://doi.org/10.7171/jbt.18-2902-002}{10.7171/jbt.18-2902-002} · PMID: \href{https://www.ncbi.nlm.nih.gov/pubmed/29805321}{29805321} · PMCID: \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5945021}{PMC5945021}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-k4BJEMHE}{}}%
+\CSLLeftMargin{113. }
+\CSLRightInline{\textbf{Complex Portal 2022: new curation frontiers}
+\CSLBlock{Birgit HM Meldal, Livia Perfetto, Colin Combe, Tiago Lubiana, João Vitor Ferreira~Cavalcante, Hema Bye-A-Jee, Andra Waagmeester, Noemi del-Toro, Anjali Shrivastava, Elisabeth Barrera, \ldots{} Sandra Orchard} \emph{Nucleic Acids Research} (2021-10-29) \url{https://doi.org/gnq75j}
+\CSLBlock{DOI: \href{https://doi.org/10.1093/nar/gkab991}{10.1093/nar/gkab991} · PMID: \href{https://www.ncbi.nlm.nih.gov/pubmed/34718729}{34718729}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-pzgOjFLZ}{}}%
+\CSLLeftMargin{114. }
+\CSLRightInline{\textbf{WikiPathways: connecting communities}
+\CSLBlock{Marvin Martens, Ammar Ammar, Anders Riutta, Andra Waagmeester, Denise~N Slenter, Kristina Hanspers, Ryan A.~Miller, Daniela Digles, Elisson~N Lopes, Friederike Ehrhart, \ldots{} Martina Kutmon} \emph{Nucleic Acids Research} (2021-01-08) \url{https://doi.org/gh6dq2}
+\CSLBlock{DOI: \href{https://doi.org/10.1093/nar/gkaa1024}{10.1093/nar/gkaa1024} · PMID: \href{https://www.ncbi.nlm.nih.gov/pubmed/33211851}{33211851} · PMCID: \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7779061}{PMC7779061}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-1Fqp7ppqH}{}}%
+\CSLLeftMargin{115. }
+\CSLRightInline{\textbf{Complex Portal 2018: extended content and enhanced visualization tools for macromolecular complexes}
+\CSLBlock{Birgit H~M Meldal, Hema Bye-A-Jee, Lukáš Gajdoš, Zuzana Hammerová, Aneta Horáčková, Filip Melicher, Livia Perfetto, Daniel Pokorný, Milagros Rodriguez Lopez, Alžběta Türková, \ldots{} Sandra Orchard} \emph{Nucleic Acids Research} (2019-01-08) \url{https://doi.org/gnq75k}
+\CSLBlock{DOI: \href{https://doi.org/10.1093/nar/gky1001}{10.1093/nar/gky1001} · PMID: \href{https://www.ncbi.nlm.nih.gov/pubmed/30357405}{30357405} · PMCID: \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6323931}{PMC6323931}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-HUodcdz1}{}}%
+\CSLLeftMargin{116. }
+\CSLRightInline{\textbf{Wikidata as a knowledge graph for the life sciences}
+\CSLBlock{Andra Waagmeester, Gregory Stupp, Sebastian Burgstaller-Muehlbacher, Benjamin M Good, Malachi Griffith, Obi L Griffith, Kristina Hanspers, Henning Hermjakob, Toby S Hudson, Kevin Hybiske, \ldots{} Andrew I Su} \emph{eLife} (2020-03-17) \url{https://doi.org/ggqqc6}
+\CSLBlock{DOI: \href{https://doi.org/10.7554/elife.52614}{10.7554/elife.52614} · PMID: \href{https://www.ncbi.nlm.nih.gov/pubmed/32180547}{32180547} · PMCID: \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7077981}{PMC7077981}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-zH3KDqhp}{}}%
+\CSLLeftMargin{117. }
+\CSLRightInline{\textbf{Representing COVID-19 information in collaborative knowledge graphs: The case of Wikidata}
+\CSLBlock{Houcemeddine Turki, Mohamed Ali Hadj Taieb, Thomas Shafee, Tiago Lubiana, Dariusz Jemielniak, Mohamed Ben Aouicha, José Emilio Labra Gayo, Eric Youngstrom, Mossab Banat, Diptanshu Das, \ldots{} WikiProject COVID-19} \emph{Semantic Web: Interoperability, Usability, Applicability} (2021-09-28) \url{https://www.wikidata.org/wiki/Q108766311}
+\CSLBlock{DOI: \href{https://doi.org/10.3233/sw-210444}{10.3233/sw-210444}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-mPoPwN77}{}}%
+\CSLLeftMargin{118. }
+\CSLRightInline{\textbf{A protocol for adding knowledge to Wikidata: aligning resources on human coronaviruses}
+\CSLBlock{Andra Waagmeester, Egon Willighagen, Andrew I Su, Martina Summer-Kutmon, José Emilio Labra Gayo, Daniel Fernández-Álvarez, Quentin J Groom, Peter J Schaap, Lisa M Verhagen, Jasper Koehorst} \emph{BMC Biology} (2021-01-22) \url{https://www.wikidata.org/wiki/Q105037759}
+\CSLBlock{DOI: \href{https://doi.org/10.1186/s12915-020-00940-y}{10.1186/s12915-020-00940-y}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-3YCzr3jU}{}}%
+\CSLLeftMargin{119. }
+\CSLRightInline{\textbf{Wikidata Queries around the SARS-CoV-2 virus and pandemic} \url{https://www.wikidata.org/wiki/Q88647643}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-SkOeuFRd}{}}%
+\CSLLeftMargin{120. }
+\CSLRightInline{\textbf{COVIWD: COVID-19 Wikidata Dashboard}
+\CSLBlock{Fariz Darari} \emph{Jurnal Ilmu Komputer dan Informasi} (2021-03-01) \url{https://www.wikidata.org/wiki/Q105833381}
+\CSLBlock{DOI: \href{https://doi.org/10.21609/jiki.v14i1.941}{10.21609/jiki.v14i1.941}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-AOVCR8mW}{}}%
+\CSLLeftMargin{121. }
+\CSLRightInline{\textbf{Painel de informação sobre a COVID-19: consultas SPARQL na Wikidata}
+\CSLBlock{Ana Carolina Simionato Arakaki, Fabiano Ferreira de Castro, Felipe Augusto Arakaki} \emph{AtoZ: Novas Práticas em Informação e Conhecimento} (2020-12-03) \url{https://www.wikidata.org/wiki/Q106249454}
+\CSLBlock{DOI: \href{https://doi.org/10.5380/atoz.v9i2.76684}{10.5380/atoz.v9i2.76684}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-19wiU1LCA}{}}%
+\CSLLeftMargin{122. }
+\CSLRightInline{\textbf{Uso de Wikidata y Wikipedia para la generación asistida de un vocabulario estructurado multilingüe sobre la pandemia de Covid-19}
+\CSLBlock{Tomás Saorín, Juan-Antonio Pastor-Sánchez, María-José Baños-Moreno} \emph{Profesional de la Informacion} (2020-09-13) \url{https://www.wikidata.org/wiki/Q107377131}
+\CSLBlock{DOI: \href{https://doi.org/10.3145/epi.2020.sep.09}{10.3145/epi.2020.sep.09}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-10EWNsZCz}{}}%
+\CSLLeftMargin{123. }
+\CSLRightInline{\textbf{The Bgee suite: integrated curated expression atlas and comparative transcriptomics in animals}
+\CSLBlock{Frederic B Bastian, Julien Roux, Anne Niknejad, Aurélie Comte, Sara SFonseca Costa, Tarcisio M Farias, Sébastien Moretti, Gilles Parmentier, Valentine Rech de Laval, Marta Rosikiewicz, \ldots{} Marc Robinson-Rechavi} \emph{Nucleic Acids Research} (2020-10-10) \url{https://www.wikidata.org/wiki/Q100513179}
+\CSLBlock{DOI: \href{https://doi.org/10.1093/nar/gkaa793}{10.1093/nar/gkaa793}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-864Pcm4C}{}}%
+\CSLLeftMargin{124. }
+\CSLRightInline{\textbf{Utilizing the Wikidata system to improve the quality of medical content in Wikipedia in diverse languages: a pilot study}
+\CSLBlock{Alexander Pfundner, Tobias Schönberg, John Horn, Richard David Boyce, Matthias Samwald} \emph{Journal of Medical Internet Research} (2015-05-05) \url{https://www.wikidata.org/wiki/Q21503276}
+\CSLBlock{DOI: \href{https://doi.org/10.2196/jmir.4163}{10.2196/jmir.4163}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-11UV98PHT}{}}%
+\CSLLeftMargin{125. }
+\CSLRightInline{\textbf{Pesquisa-ação: uma introdução metodológica}
+\CSLBlock{David Tripp} \emph{Educação e Pesquisa} (2005-12-01) \url{https://www.wikidata.org/wiki/Q108479295}
+\CSLBlock{DOI: \href{https://doi.org/10.1590/s1517-97022005000300009}{10.1590/s1517-97022005000300009}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-CHsAoEvr}{}}%
+\CSLLeftMargin{126. }
+\CSLRightInline{\textbf{protégé} \url{https://protege.stanford.edu/}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-uCE45Jh8}{}}%
+\CSLLeftMargin{127. }
+\CSLRightInline{\textbf{Towards a pragmatic definition of cell type}
+\CSLBlock{Tiago Lubiana, Helder I Nakaya} \emph{Authorea, Inc.} (2021-01-04) \url{https://doi.org/ghrxwf}
+\CSLBlock{DOI: \href{https://doi.org/10.22541/au.160979530.02627436/v1}{10.22541/au.160979530.02627436/v1}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-AHGRV6KQ}{}}%
+\CSLLeftMargin{128. }
+\CSLRightInline{\textbf{PhyloCode} \url{https://www.wikidata.org/wiki/Q1189395}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-baJRsCMu}{}}%
+\CSLLeftMargin{129. }
+\CSLRightInline{\textbf{Highlights of the 'gene nomenclature across species' meeting.}
+\CSLBlock{Elspeth A Bruford} \emph{Human genomics} (2010-02-01) \url{https://www.wikidata.org/wiki/Q42790699}
+\CSLBlock{DOI: \href{https://doi.org/10.1186/1479-7364-4-3-213}{10.1186/1479-7364-4-3-213}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-5ZFRyTy5}{}}%
+\CSLLeftMargin{130. }
+\CSLRightInline{\textbf{Ontological realism: A methodology for coordinated evolution of scientific ontologies}
+\CSLBlock{Barry Smith, Werner Ceusters} \emph{Applied Ontology} (2010-11-15) \url{https://www.wikidata.org/wiki/Q28239464}
+\CSLBlock{DOI: \href{https://doi.org/10.3233/ao-2010-0079}{10.3233/ao-2010-0079}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-eP47FILn}{}}%
+\CSLLeftMargin{131. }
+\CSLRightInline{\textbf{Multi-level ontology-based conceptual modeling}
+\CSLBlock{Victorio A Carvalho, João Paulo A Almeida, Claudenir M Fonseca, Giancarlo Guizzardi} \emph{Data and Knowledge Engineering} (2017-05-01) \url{https://www.wikidata.org/wiki/Q108926456}
+\CSLBlock{DOI: \href{https://doi.org/10.1016/j.datak.2017.03.002}{10.1016/j.datak.2017.03.002}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-pFijpXkl}{}}%
+\CSLLeftMargin{132. }
+\CSLRightInline{\textbf{The Human Cell Atlas: Technical approaches and challenges.}
+\CSLBlock{Chung Chau Hon, Jay W Shin, Piero Carninci, Michael JT Stubbington} \emph{Briefings in functional genomics} (2017-10-28) \url{https://www.wikidata.org/wiki/Q48563763}
+\CSLBlock{DOI: \href{https://doi.org/10.1093/bfgp/elx029}{10.1093/bfgp/elx029}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-1C6LI68h6}{}}%
+\CSLLeftMargin{133. }
+\CSLRightInline{\textbf{Popper on Definitions}
+\CSLBlock{Wilhelm Büttemeyer} \emph{Zeitschrift fur allgemeine Wissenschaftstheorie. Journal for general philosophy of science} (2005-01-01) \url{https://www.wikidata.org/wiki/Q108925548}
+\CSLBlock{DOI: \href{https://doi.org/10.1007/s10838-005-6037-2}{10.1007/s10838-005-6037-2}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-M0lqRYJb}{}}%
+\CSLLeftMargin{134. }
+\CSLRightInline{\textbf{PanglaoDB - A Single Cell Sequencing Resource For Gene Expression Data} \url{https://panglaodb.se/index.html}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-T3PlZ3Vh}{}}%
+\CSLLeftMargin{135. }
+\CSLRightInline{\textbf{PanglaoDB: a web server for exploration of mouse and human single-cell RNA sequencing data}
+\CSLBlock{Oscar Franzén, Li-Ming Gan, Johan LM Björkegren} \emph{Database} (2019) \url{https://doi.org/ggkzxr}
+\CSLBlock{DOI: \href{https://doi.org/10.1093/database/baz046}{10.1093/database/baz046} · PMID: \href{https://www.ncbi.nlm.nih.gov/pubmed/30951143}{30951143} · PMCID: \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6450036}{PMC6450036}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-OGXYtGZ8}{}}%
+\CSLLeftMargin{136. }
+\CSLRightInline{\textbf{Linked Data - Design Issues} \url{https://www.w3.org/DesignIssues/LinkedData.html}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-4AEy2xhQ}{}}%
+\CSLLeftMargin{137. }
+\CSLRightInline{\textbf{CellFinder: a cell data repository}
+\CSLBlock{Harald Stachelscheid, Stefanie Seltmann, Fritz Lekschas, Jean-Fred Fontaine, Nancy Mah, Mariana Lara Neves, Miguel A Andrade-Navarro, Ulf Leser, Andreas Kurtz} \emph{Nucleic Acids Research} (2013-12-03) \url{https://www.wikidata.org/wiki/Q28660708}
+\CSLBlock{DOI: \href{https://doi.org/10.1093/nar/gkt1264}{10.1093/nar/gkt1264}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-imSZTi52}{}}%
+\CSLLeftMargin{138. }
+\CSLRightInline{\textbf{Type or Individual? Evidence of Large-Scale Conceptual Disarray in Wikidata}
+\CSLBlock{Atílio A Dadalto, João Paulo A Almeida, Claudenir M Fonseca, Giancarlo Guizzardi} \emph{Lecture Notes in Computer Science} (2021-01-01) \url{https://www.wikidata.org/wiki/Q109990743}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-RLHsA1U8}{}}%
+\CSLLeftMargin{139. }
+\CSLRightInline{\textbf{CELDA -\/- an ontology for the comprehensive representation of cells in complex systems}
+\CSLBlock{Stefanie Seltmann, Harald Stachelscheid, Alexander Damaschun, Ludger Jansen, Fritz Lekschas, Jean-Fred Fontaine, Throng Nghia Nguyen-Dobinsky, Ulf Leser, Andreas Kurtz} \emph{BMC Bioinformatics} (2013-07-17) \url{https://www.wikidata.org/wiki/Q21284308}
+\CSLBlock{DOI: \href{https://doi.org/10.1186/1471-2105-14-228}{10.1186/1471-2105-14-228}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-HUJ9NzAb}{}}%
+\CSLLeftMargin{140. }
+\CSLRightInline{\textbf{UniProt} \url{https://sparql.uniprot.org/sparql}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-AgOOCR24}{}}%
+\CSLLeftMargin{141. }
+\CSLRightInline{\textbf{Portal:Semantic Web - WikiPathways} \url{https://www.wikipathways.org/index.php/Portal:Semantic_Web}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-rhRRCtlA}{}}%
+\CSLLeftMargin{142. }
+\CSLRightInline{\textbf{Cell Markers}
+\CSLBlock{Konstantin Yakimchuk} \emph{Materials and Methods} (2013-05-02) \url{https://doi.org/ghq494}
+\CSLBlock{DOI: \href{https://doi.org/10.13070/mm.en.3.183}{10.13070/mm.en.3.183}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-6uWWsiSq}{}}%
+\CSLLeftMargin{143. }
+\CSLRightInline{\textbf{SHOGoiN: Shogoin Human Omics database for the Generation of iPS and Normal cells} \url{https://stemcellinformatics.org/}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-SdbIYKUa}{}}%
+\CSLLeftMargin{144. }
+\CSLRightInline{\textbf{Comparison of reference management software - Wikipedia} \url{https://en.wikipedia.org/wiki/Comparison_of_reference_management_software}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-uYuz0opI}{}}%
+\CSLLeftMargin{145. }
+\CSLRightInline{\textbf{Wikipedia, the free encyclopedia} \url{https://en.wikipedia.org/wiki/Main_Page}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-KNGv5MPp}{}}%
+\CSLLeftMargin{146. }
+\CSLRightInline{\textbf{Clean Coder Blog} \url{https://blog.cleancoder.com/uncle-bob/2017/12/18/Excuses.html}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-rPKBwmYh}{}}%
+\CSLLeftMargin{147. }
+\CSLRightInline{\textbf{Como fazer um fichamento}
+\CSLBlock{Priscilla de Carvalho Nunes disse} \emph{Blog da Biblioteca da ECA-USP} (2019-09-30) \url{https://bibliotecadaeca.wordpress.com/2019/09/30/como-fazer-um-fichamento/}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-1HBVPtZGp}{}}%
+\CSLLeftMargin{148. }
+\CSLRightInline{\textbf{Come si fa una tesi di laurea} \url{https://www.wikidata.org/wiki/Q3684178}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-15luL9zZC}{}}%
+\CSLLeftMargin{149. }
+\CSLRightInline{\textbf{Unpaywall} \url{https://unpaywall.org/}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-13HqB23xH}{}}%
+\CSLLeftMargin{150. }
+\CSLRightInline{\textbf{Clean Code: A Handbook of Agile Software Craftsmanship} \url{https://www.wikidata.org/wiki/Q109996684}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-1A9RvszKC}{}}%
+\CSLLeftMargin{151. }
+\CSLRightInline{\textbf{Wikidata:Tools/Author Disambiguator - Wikidata} \url{https://www.wikidata.org/wiki/Wikidata:Tools/Author_Disambiguator}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-6chnW6cc}{}}%
+\CSLLeftMargin{152. }
+\CSLRightInline{\textbf{wbib: A helper for building Wikidata-based literature dashboards via SPARQL queries.}
+\CSLBlock{Tiago Lubiana} \url{https://github.com/lubianat/wbib}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-1hag8XE6}{}}%
+\CSLLeftMargin{153. }
+\CSLRightInline{\textbf{HCA Latin America - 2021 Workshop} \url{https://www.humancellatlas.org/hca-latin-america-2021-workshop/}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-kHL3NVxk}{}}%
+\CSLLeftMargin{154. }
+\CSLRightInline{\textbf{BioHackathon Europe} \url{https://biohackathon-europe.org/}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-JgiKEEdq}{}}%
+\CSLLeftMargin{155. }
+\CSLRightInline{\textbf{The Whelming › Tech, tools, and tribulations}
+\CSLBlock{Scott Allan Wallick} \url{http://magnusmanske.de/wordpress/}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-MxIeSJYt}{}}%
+\CSLLeftMargin{156. }
+\CSLRightInline{\textbf{fcoex: FCBF-based Co-Expression Networks for Single Cells}
+\CSLBlock{Tiago Lubiana, Helder Nakaya} \emph{Bioconductor version: Release (3.14)} (2021) \url{https://bioconductor.org/packages/fcoex/}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-CQRJ53gu}{}}%
+\CSLLeftMargin{157. }
+\CSLRightInline{\textbf{Complex Portal 2022: new curation frontiers}
+\CSLBlock{Birgit HM Meldal, Livia Perfetto, Colin Combe, Tiago Lubiana, João Vitor Ferreira~Cavalcante, Hema Bye-A-Jee, Andra Waagmeester, Noemi del-Toro, Anjali Shrivastava, Elisabeth Barrera, \ldots{} Sandra Orchard} \emph{Nucleic Acids Research} (2021-10-29) \url{https://www.wikidata.org/wiki/Q109348309}
+\CSLBlock{DOI: \href{https://doi.org/10.1093/nar/gkab991}{10.1093/nar/gkab991}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-1DguATd9G}{}}%
+\CSLLeftMargin{158. }
+\CSLRightInline{\textbf{The Cellosaurus, a cell-line knowledge resource.}
+\CSLBlock{Amos Bairoch} \emph{Journal of Biomolecular Techniques} (2018-05-01) \url{https://www.wikidata.org/wiki/Q54370168}
+\CSLBlock{DOI: \href{https://doi.org/10.7171/jbt.18-2902-002}{10.7171/jbt.18-2902-002}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-lMQxhx3q}{}}%
+\CSLLeftMargin{159. }
+\CSLRightInline{\textbf{User:CellosaurusBot - Wikidata} \url{https://www.wikidata.org/wiki/User:CellosaurusBot}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-F2mYjDJ0}{}}%
+\CSLLeftMargin{160. }
+\CSLRightInline{\textbf{The Brazilian Reproducibility Initiative}
+\CSLBlock{Ana P Wasilewska-Sampaio, Olavo Bohrer Amaral, Kleber Neves, Ana P Wasilewska-Sampaio, Clarissa FD Carneiro, Olavo Bohrer Amaral, Clarissa FD Carneiro} \emph{eLife} (2019-02-05) \url{https://www.wikidata.org/wiki/Q61799268}
+\CSLBlock{DOI: \href{https://doi.org/10.7554/elife.41602}{10.7554/elife.41602}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-oXMFSv5v}{}}%
+\CSLLeftMargin{161. }
+\CSLRightInline{\textbf{Sharing intermediate datasets from systematic reviews}
+\CSLBlock{Tiago Lubiana, Olavo Bohrer Amaral, Kleber Neves} \emph{Center for Open Science} (2021-11-29) \url{https://doi.org/gnrf9v}
+\CSLBlock{DOI: \href{https://doi.org/10.31222/osf.io/vbwa9}{10.31222/osf.io/vbwa9}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-gdYsBE7d}{}}%
+\CSLLeftMargin{162. }
+\CSLRightInline{\textbf{Wisecube AI \textbar{} Knowledge Graph Engine} \url{https://www.wisecube.ai/}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-rkXotO9x}{}}%
+\CSLLeftMargin{163. }
+\CSLRightInline{\textbf{An overview of the BIOASQ large-scale biomedical semantic indexing and question answering competition}
+\CSLBlock{George Tsatsaronis, Georgios Balikas, Prodromos Malakasiotis, Ioannis Partalas, Matthias Zschunke, Michael R Alvers, Dirk Weissenborn, Anastasia Krithara, Sergios Petridis, Dimitris Polychronopoulos, \ldots{} Georgios Paliouras} \emph{BMC Bioinformatics} (2015-04-30) \url{https://www.wikidata.org/wiki/Q28646342}
+\CSLBlock{DOI: \href{https://doi.org/10.1186/s12859-015-0564-6}{10.1186/s12859-015-0564-6}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-12LOzmXRs}{}}%
+\CSLLeftMargin{164. }
+\CSLRightInline{\textbf{No Budget Science Hack Week}
+\CSLBlock{reprodutibilidade} \url{https://www.reprodutibilidade.bio.br/hack-week-2021}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-SALI6Ywb}{}}%
+\CSLLeftMargin{165. }
+\CSLRightInline{\textbf{Wikidata for 5-star Linked Open Databases: A case study of PanglaoDB}
+\CSLBlock{Tiago Lubiana, João Vitor Ferreira Cavalcante} \emph{Zenodo} (2021-12-01) \url{https://doi.org/gnpzvr}
+\CSLBlock{DOI: \href{https://doi.org/10.5281/zenodo.5747849}{10.5281/zenodo.5747849}}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-IJG65hFm}{}}%
+\CSLLeftMargin{166. }
+\CSLRightInline{\textbf{Biocuration - Wikipedia} \url{https://en.wikipedia.org/wiki/Biocuration}}
+
+\leavevmode\vadjust pre{\hypertarget{ref-14Wi842eZ}{}}%
+\CSLLeftMargin{167. }
+\CSLRightInline{\textbf{biohackathon-projects-2021/projects/32 at main · elixir-europe/biohackathon-projects-2021}
+\CSLBlock{GitHub} \url{https://github.com/elixir-europe/biohackathon-projects-2021}}
+
+\end{CSLReferences}
